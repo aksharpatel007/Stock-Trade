@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockTrade Pro - Ultimate Trading Terminal</title>
+
+    <!-- External Libraries: Bootstrap 5 & Chart.js -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial/dist/chartjs-chart-financial.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2962ff;
+            --success: #00c853;
+            --danger: #d50000;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f2f5;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --border-color: #e0e0e0;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --sidebar-width-collapsed: 70px;
+            --sidebar-width-expanded: 240px;
+            --header-height: 60px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1e1e2d;
+            --bg-secondary: #151521;
+            --text-primary: #e2e2e2;
+            --text-secondary: #92929f;
+            --border-color: #2b2b40;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            height: 100vh; /* Fixed height to viewport */
+            overflow: hidden; /* Disable body scroll */
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Utils */
+        .text-success-custom { color: var(--success) !important; }
+        .text-danger-custom { color: var(--danger) !important; }
+
+        /* Layout Components */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2000;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            width: 90%;
+            overflow: hidden;
+        }
+
+        .navbar-custom {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 1.5rem;
+            height: var(--header-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Hover Sidebar */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width-collapsed);
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1020;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding-top: 1rem;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar:hover {
+            width: var(--sidebar-width-expanded);
+        }
+
+        .sidebar-btn {
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            white-space: nowrap;
+            transition: all 0.2s;
+            cursor: pointer;
+            width: 100%;
+            height: 50px;
+        }
+
+        .sidebar-btn i {
+            font-size: 1.4rem;
+            min-width: 30px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .sidebar-btn span {
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .sidebar:hover .sidebar-btn span {
+            opacity: 1;
+        }
+
+        .sidebar-btn:hover, .sidebar-btn.active {
+            color: var(--primary);
+            background: rgba(41, 98, 255, 0.08);
+            border-right: 3px solid var(--primary);
+        }
+
+        /* Main Content Wrapper */
+        .main-wrapper {
+            margin-left: var(--sidebar-width-collapsed);
+            margin-top: var(--header-height); /* Push down below fixed nav */
+            padding: 20px 20px 100px 20px; /* Added significant bottom padding for fixed dock */
+            transition: margin-left 0.3s;
+            height: calc(100vh - var(--header-height)); /* Fill remaining height */
+            overflow-y: auto; /* Enable internal scrolling */
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        .main-wrapper::-webkit-scrollbar { width: 6px; }
+        .main-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .main-wrapper::-webkit-scrollbar-thumb { background: rgba(108, 117, 125, 0.3); border-radius: 4px; }
+        .main-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(108, 117, 125, 0.5); }
+
+        /* Ticker */
+        .ticker-tape {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            margin-top: -20px; /* Pull up to sit under nav */
+            margin-bottom: 20px;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            animation: scroll 40s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: inline-block;
+            margin: 0 25px;
+            font-weight: 600;
+        }
+
+        /* Cards & Charts */
+        .stock-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .chart-container {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            height: 450px;
+        }
+
+        /* NEW Balance Card Style */
+        .balance-card {
+            background: linear-gradient(120deg, #141e30 0%, #243b55 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .balance-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 5px;
+        }
+
+        /* Features */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .heatmap-cell {
+            padding: 25px 5px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 110px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+            z-index: 10;
+        }
+
+        .alert-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid var(--bg-primary);
+        }
+
+        /* Sticky Trade Dock - UPDATED STYLE */
+        .trade-dock {
+            position: fixed;
+            bottom: 0;
+            left: var(--sidebar-width-collapsed);
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 40px;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            z-index: 1040;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(8px);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        [data-theme="dark"] .trade-dock {
+            background: rgba(30, 30, 45, 0.95);
+        }
+
+        @media (max-width: 768px) {
+            .trade-dock {
+                padding: 10px 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .trade-dock .dock-info {
+                width: 100%;
+                justify-content: space-between;
+                display: flex;
+                margin-bottom: 5px;
+            }
+            .trade-dock .dock-actions {
+                width: 100%;
+            }
+        }
+
+        /* List Items */
+        .list-row {
+            transition: background 0.2s;
+        }
+        .list-row:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Toast */
+        .toast-container { position: fixed; bottom: 120px; right: 20px; z-index: 9999; } /* Moved higher */
+    </style>
+</head>
+<body data-theme="light">
+
+    <!-- Toast Notification Area -->
+    <div class="toast-container" id="toastArea"></div>
+
+    <!-- Login -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="p-5 text-center border-bottom">
+                <div class="mb-3">
+                    <i class="bi bi-graph-up-arrow display-4 text-primary"></i>
+                </div>
+                <h2 class="fw-bold text-dark">StockTrade Pro</h2>
+                <p class="text-secondary mb-0">Professional Trading Terminal</p>
+            </div>
+            <div class="p-4 bg-white">
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">USER ID</label>
+                        <input type="email" class="form-control form-control-lg bg-light" value="trader@wallstreet.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-muted small fw-bold">PASSWORD</label>
+                        <input type="password" class="form-control form-control-lg bg-light" value="password123" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 btn-lg shadow-sm fw-bold">ENTER TERMINAL</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" style="display: none;">
+
+        <!-- Fixed Navbar -->
+        <nav class="navbar navbar-custom d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="fw-bold fs-4 text-primary me-2"><i class="bi bi-graph-up-arrow"></i></div>
+                <span class="fw-bold fs-5 me-4">StockTrade Pro</span>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success d-none d-md-inline-block rounded-pill px-3"><i class="bi bi-circle-fill me-1" style="font-size: 0.6em;"></i> MARKET OPEN</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="position-relative cursor-pointer" onclick="showSection('alerts')" style="cursor: pointer;">
+                    <span class="fs-5 text-secondary"><i class="bi bi-bell"></i></span>
+                    <span class="alert-badge" id="alertBadge" style="display:none;">0</span>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="toggleTheme()" id="themeBtn"><i class="bi bi-moon"></i></button>
+                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="location.reload()"><i class="bi bi-box-arrow-right"></i></button>
+            </div>
+        </nav>
+
+        <!-- Sidebar (Hover to Expand) -->
+        <div class="sidebar">
+            <button class="sidebar-btn active" onclick="showSection('dashboard')" id="nav-dashboard">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="sidebar-btn" onclick="showSection('search')" id="nav-search">
+                <i class="bi bi-search"></i>
+                <span>Screener</span>
+            </button>
+            <button class="sidebar-btn" onclick="showSection('portfolio')" id="nav-portfolio">
+                <i class="bi bi-briefcase-fill"></i>
+                <span>Portfolio</span>
+            </button>
+            <button class="sidebar-btn" onclick="showSection('orders')" id="nav-orders">
+                <i class="bi bi-clipboard-data-fill"></i>
+                <span>Orders</span>
+            </button>
+            <button class="sidebar-btn" onclick="showSection('history')" id="nav-history">
+                <i class="bi bi-clock-history"></i>
+                <span>History</span>
+            </button>
+            <button class="sidebar-btn" onclick="showSection('heatmap')" id="nav-heatmap">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+                <span>Heatmap</span>
+            </button>
+            <button class="sidebar-btn" onclick="showSection('bot')" id="nav-bot">
+                <i class="bi bi-robot"></i>
+                <span>Auto-Bot</span>
+            </button>
+            <div class="mt-auto mb-3 text-center d-none d-md-block">
+                <small class="text-muted" style="font-size: 0.7em;">v2.5.0</small>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+
+            <!-- Ticker -->
+            <div class="ticker-tape rounded mb-4 shadow-sm">
+                <div class="ticker-content" id="tickerContent">
+                    <!-- Ticker items injected via JS -->
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="content-section">
+                <div class="row">
+                    <div class="col-lg-9 col-md-8 mb-4">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="balance-card d-flex flex-column flex-md-row justify-content-between align-items-center">
+                                    <div class="mb-3 mb-md-0">
+                                        <div class="balance-label">Net Liquidation Value</div>
+                                        <h1 class="fw-bold mb-0 display-5" id="totalBalance">$50,000.00</h1>
+                                        <div class="mt-2 text-white-50 small">
+                                            <i class="bi bi-shield-lock-fill"></i> Encrypted • Margin Available
+                                        </div>
+                                    </div>
+                                    <div class="d-flex gap-5 text-end">
+                                        <div>
+                                            <div class="balance-label">Buying Power</div>
+                                            <div class="fw-bold fs-4" id="cashBalance">$50,000</div>
+                                        </div>
+                                        <div>
+                                            <div class="balance-label">Day's P&L</div>
+                                            <div class="fw-bold fs-4" id="dailyPL">+$0.00</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart -->
+                        <div class="chart-container">
+                            <div class="d-flex justify-content-between align-items-center mb-2" style="height: 40px;">
+                                <div>
+                                    <h5 class="m-0 fw-bold" id="chartTitle">AAPL - Apple Inc.</h5>
+                                    <small class="text-muted" id="chartSubtitle">Nasdaq • Real-time Data</small>
+                                </div>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-secondary active" id="btn-line" onclick="updateChartType('line')">Line</button>
+                                    <button class="btn btn-outline-secondary" id="btn-candle" onclick="updateChartType('candlestick')">Candle</button>
+                                    <button class="btn btn-outline-secondary" id="btn-bar" onclick="updateChartType('bar')">Bar</button>
+                                </div>
+                            </div>
+                            <div style="height: 350px; width: 100%;">
+                                <canvas id="mainChart"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Side Panel (Watchlist) -->
+                    <div class="col-lg-3 col-md-4">
+                        <div class="stock-card h-100 p-0 overflow-hidden">
+                            <div class="p-3 border-bottom bg-light bg-opacity-50">
+                                <h6 class="fw-bold mb-0">Market Watch</h6>
+                            </div>
+                            <div id="topMoversList" style="max-height: 600px; overflow-y: auto;">
+                                <!-- List populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sticky Trade Dock (Permanent on Screen) -->
+                <div class="trade-dock">
+                    <div class="dock-info d-flex align-items-center gap-4">
+                        <div>
+                            <div class="text-uppercase text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">Quick Trade</div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h3 class="mb-0 fw-bold" id="dockSymbol">AAPL</h3>
+                                <span class="fs-5 fw-bold" id="dockPrice">$175.00</span>
+                            </div>
+                        </div>
+                        <div class="d-none d-lg-block border-start ps-4">
+                            <small class="text-muted d-block">Buying Power</small>
+                            <span class="fw-bold text-primary" id="dockPower">$50,000</span>
+                        </div>
+                    </div>
+
+                    <div class="dock-actions d-flex gap-3" style="min-width: 300px; max-width: 500px; flex-grow: 1; justify-content: flex-end;">
+                        <button class="btn btn-success flex-grow-1 py-2 px-4 fw-bold shadow-sm d-flex align-items-center justify-content-center" onclick="openTradeModal('buy')">
+                            <i class="bi bi-arrow-up-circle-fill me-2 fs-5"></i>
+                            <div class="d-flex flex-column align-items-start lh-1">
+                                <span class="fs-6">BUY</span>
+                                <span style="font-size: 0.7em; opacity: 0.9;">MARKET</span>
+                            </div>
+                        </button>
+                        <button class="btn btn-danger flex-grow-1 py-2 px-4 fw-bold shadow-sm d-flex align-items-center justify-content-center" onclick="openTradeModal('sell')">
+                            <i class="bi bi-arrow-down-circle-fill me-2 fs-5"></i>
+                            <div class="d-flex flex-column align-items-start lh-1">
+                                <span class="fs-6">SELL</span>
+                                <span style="font-size: 0.7em; opacity: 0.9;">MARKET</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search / Screener Section -->
+            <div id="searchSection" class="content-section" style="display:none;">
+                <h3 class="fw-bold mb-4">Stock Screener</h3>
+                <div class="stock-card p-4 mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-6 position-relative">
+                            <label class="form-label text-muted small fw-bold">SEARCH SYMBOL</label>
+                            <input type="text" class="form-control form-control-lg" id="screenerSearch" placeholder="e.g. MSFT, TSLA, DIS..." onkeyup="filterScreener()">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-bold">SECTOR</label>
+                            <select class="form-select form-select-lg" id="screenerSector" onchange="filterScreener()">
+                                <option value="all">All Sectors</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Automotive">Automotive</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Health">Healthcare</option>
+                                <option value="Retail">Consumer</option>
+                                <option value="Energy">Energy</option>
+                                <option value="Entertainment">Entertainment</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-bold">TREND</label>
+                            <select class="form-select form-select-lg" id="screenerTrend" onchange="filterScreener()">
+                                <option value="all">Any Trend</option>
+                                <option value="up">Gainers</option>
+                                <option value="down">Losers</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="screenerGrid"></div>
+            </div>
+
+            <!-- Portfolio Section -->
+            <div id="portfolioSection" class="content-section" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold">My Portfolio</h3>
+                    <button class="btn btn-outline-primary btn-sm" onclick="showToast('Exporting data...', 'info')"><i class="bi bi-download"></i> Export CSV</button>
+                </div>
+                <div class="stock-card p-0 overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" style="color: var(--text-primary);">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4">Symbol</th>
+                                    <th>Shares</th>
+                                    <th>Avg Price</th>
+                                    <th>Current Price</th>
+                                    <th>Return ($)</th>
+                                    <th>Return (%)</th>
+                                    <th class="text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portfolioTableBody">
+                                <tr><td colspan="7" class="text-center p-5">Loading Assets...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Open Orders -->
+            <div id="ordersSection" class="content-section" style="display:none;">
+                <h3 class="fw-bold mb-4">Active Orders</h3>
+                <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
+                    <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+                    <div>Pending Limit orders will execute automatically when price targets are hit.</div>
+                </div>
+                <div class="stock-card p-0">
+                    <table class="table table-hover align-middle mb-0" style="color: var(--text-primary);">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4">Time</th>
+                                <th>Type</th>
+                                <th>Symbol</th>
+                                <th>Target Price</th>
+                                <th>Qty</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div id="historySection" class="content-section" style="display:none;">
+                <h3 class="fw-bold mb-4">Trade History</h3>
+                <div id="historyList"></div>
+            </div>
+
+            <!-- Heatmap -->
+            <div id="heatmapSection" class="content-section" style="display:none;">
+                <h3 class="fw-bold mb-4">Market Heatmap</h3>
+                <div id="heatmapContainer" class="heatmap-grid p-4 bg-white rounded shadow-sm" style="background: var(--bg-primary) !important;"></div>
+            </div>
+
+            <!-- Trading Bot -->
+            <div id="botSection" class="content-section" style="display:none;">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="stock-card p-5 text-center">
+                            <div class="mb-4 display-1 text-primary opacity-50"><i class="bi bi-robot"></i></div>
+                            <h2>Algorithmic Trading Bot</h2>
+                            <p class="text-muted">The bot executes trades automatically based on simple Moving Average crossovers.</p>
+
+                            <div class="d-flex justify-content-center gap-3 my-4">
+                                <div class="p-3 border rounded bg-light">
+                                    <div class="small text-muted uppercase">Status</div>
+                                    <div class="fw-bold text-danger" id="botStatusText">STOPPED</div>
+                                </div>
+                                <div class="p-3 border rounded bg-light">
+                                    <div class="small text-muted uppercase">Trades Executed</div>
+                                    <div class="fw-bold" id="botTradesCount">0</div>
+                                </div>
+                                <div class="p-3 border rounded bg-light">
+                                    <div class="small text-muted uppercase">Strategy</div>
+                                    <div class="fw-bold">SMA Crossover</div>
+                                </div>
+                            </div>
+
+                            <button id="botToggleBtn" class="btn btn-lg btn-success w-50 shadow-sm" onclick="toggleBot()">START BOT</button>
+                        </div>
+                        <div class="stock-card">
+                            <h6 class="border-bottom pb-2 mb-0 px-3 pt-3">Bot Activity Log</h6>
+                            <div id="botLog" class="p-3" style="height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.9em; background: var(--bg-secondary);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Manager -->
+            <div id="alertsSection" class="content-section" style="display:none;">
+                <h3 class="fw-bold mb-4">Price Alerts</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stock-card">
+                            <h6 class="mb-3 fw-bold">Create Alert</h6>
+                            <div class="mb-2">
+                                <label class="small text-muted">Symbol</label>
+                                <select id="alertSymbol" class="form-select"></select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="small text-muted">Target Price ($)</label>
+                                <input type="number" id="alertPrice" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="small text-muted">Condition</label>
+                                <select id="alertCondition" class="form-select">
+                                    <option value="above">Goes Above</option>
+                                    <option value="below">Goes Below</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="addAlert()">Set Alert</button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="stock-card">
+                            <h6 class="mb-3 fw-bold">Active Alerts</h6>
+                            <ul class="list-group list-group-flush" id="alertsList">
+                                <li class="list-group-item bg-transparent text-muted text-center">No active alerts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Trade Modal -->
+    <div class="modal fade" id="tradeModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 bg-light">
+                    <div>
+                        <h5 class="modal-title fw-bold" id="modalTitle">Trade AAPL</h5>
+                        <small class="text-muted">Order Ticket</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-4">
+                        <h1 class="fw-bold display-4 mb-0" id="modalPriceDisplay">$150.00</h1>
+                        <span id="modalChangeDisplay" class="badge bg-success">0.00%</span>
+                    </div>
+
+                    <ul class="nav nav-pills nav-fill mb-4 bg-light p-1 rounded" id="tradeTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active rounded shadow-sm" onclick="setOrderType('market')" style="cursor:pointer" id="tab-market">Market</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded" onclick="setOrderType('limit')" style="cursor:pointer" id="tab-limit">Limit</a>
+                        </li>
+                    </ul>
+
+                    <div id="limitPriceContainer" class="mb-3" style="display:none;">
+                        <label class="form-label text-muted small fw-bold">TARGET PRICE ($)</label>
+                        <input type="number" id="tradeTargetPrice" class="form-control form-control-lg" oninput="calculateTotal()">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">QUANTITY</label>
+                        <div class="input-group input-group-lg">
+                            <button class="btn btn-outline-secondary" onclick="adjQty(-1)">-</button>
+                            <input type="number" id="tradeQty" class="form-control text-center" value="1" min="1" oninput="calculateTotal()">
+                            <button class="btn btn-outline-secondary" onclick="adjQty(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center p-3 bg-secondary bg-opacity-10 rounded mb-4">
+                        <span class="text-muted fw-bold small">ESTIMATED TOTAL</span>
+                        <span class="fw-bold fs-4" id="tradeTotal">$0.00</span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success btn-lg py-3" id="btnBuy" onclick="executeTrade('buy')">BUY</button>
+                        <button class="btn btn-danger btn-lg py-3" id="btnSell" onclick="executeTrade('sell')">SELL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. DATA MODELS & STATE --- */
+
+        // Expanded Stock List
+        let stocks = [
+            { symbol: 'AAPL', name: 'Apple Inc.', price: 175.00, sector: 'Technology', trend: 0 },
+            { symbol: 'MSFT', name: 'Microsoft', price: 390.00, sector: 'Technology', trend: 0 },
+            { symbol: 'GOOGL', name: 'Alphabet', price: 140.00, sector: 'Technology', trend: 0 },
+            { symbol: 'AMZN', name: 'Amazon', price: 155.00, sector: 'Retail', trend: 0 },
+            { symbol: 'TSLA', name: 'Tesla', price: 215.00, sector: 'Automotive', trend: 0 },
+            { symbol: 'NVDA', name: 'Nvidia', price: 600.00, sector: 'Technology', trend: 0 },
+            { symbol: 'JPM', name: 'JPMorgan', price: 170.00, sector: 'Finance', trend: 0 },
+            { symbol: 'BAC', name: 'Bank of America', price: 33.00, sector: 'Finance', trend: 0 },
+            { symbol: 'PFE', name: 'Pfizer', price: 28.00, sector: 'Health', trend: 0 },
+            { symbol: 'WMT', name: 'Walmart', price: 165.00, sector: 'Retail', trend: 0 },
+            { symbol: 'F', name: 'Ford', price: 12.00, sector: 'Automotive', trend: 0 },
+            { symbol: 'AMD', name: 'AMD', price: 170.00, sector: 'Technology', trend: 0 },
+            { symbol: 'NFLX', name: 'Netflix', price: 480.00, sector: 'Entertainment', trend: 0 },
+            { symbol: 'DIS', name: 'Disney', price: 95.00, sector: 'Entertainment', trend: 0 },
+            { symbol: 'KO', name: 'Coca-Cola', price: 60.00, sector: 'Retail', trend: 0 },
+            { symbol: 'PEP', name: 'PepsiCo', price: 168.00, sector: 'Retail', trend: 0 },
+            { symbol: 'V', name: 'Visa', price: 260.00, sector: 'Finance', trend: 0 },
+            { symbol: 'MA', name: 'Mastercard', price: 440.00, sector: 'Finance', trend: 0 },
+            { symbol: 'INTC', name: 'Intel', price: 45.00, sector: 'Technology', trend: 0 },
+            { symbol: 'CSCO', name: 'Cisco', price: 50.00, sector: 'Technology', trend: 0 },
+            { symbol: 'XOM', name: 'Exxon Mobil', price: 102.00, sector: 'Energy', trend: 0 },
+            { symbol: 'CVX', name: 'Chevron', price: 145.00, sector: 'Energy', trend: 0 },
+            // Indian Stocks
+            { symbol: 'RELIANCE', name: 'Reliance Industries', price: 2500.00, sector: 'Energy', trend: 0 },
+            { symbol: 'TCS', name: 'Tata Consultancy Svc', price: 3500.00, sector: 'Technology', trend: 0 },
+            { symbol: 'HDFCBANK', name: 'HDFC Bank', price: 1600.00, sector: 'Finance', trend: 0 },
+            { symbol: 'INFY', name: 'Infosys', price: 1400.00, sector: 'Technology', trend: 0 },
+            { symbol: 'ICICIBANK', name: 'ICICI Bank', price: 950.00, sector: 'Finance', trend: 0 },
+            { symbol: 'HINDUNILVR', name: 'Hindustan Unilever', price: 2500.00, sector: 'Retail', trend: 0 },
+            { symbol: 'SBIN', name: 'State Bank of India', price: 600.00, sector: 'Finance', trend: 0 },
+            { symbol: 'BHARTIARTL', name: 'Bharti Airtel', price: 900.00, sector: 'Technology', trend: 0 },
+            { symbol: 'ITC', name: 'ITC Limited', price: 450.00, sector: 'Retail', trend: 0 },
+            { symbol: 'KOTAKBANK', name: 'Kotak Mahindra Bank', price: 1800.00, sector: 'Finance', trend: 0 },
+            { symbol: 'LT', name: 'Larsen & Toubro', price: 2900.00, sector: 'Construction', trend: 0 },
+            { symbol: 'AXISBANK', name: 'Axis Bank', price: 1000.00, sector: 'Finance', trend: 0 },
+            { symbol: 'TATAMOTORS', name: 'Tata Motors', price: 650.00, sector: 'Automotive', trend: 0 },
+            { symbol: 'MARUTI', name: 'Maruti Suzuki', price: 10500.00, sector: 'Automotive', trend: 0 },
+            { symbol: 'SUNPHARMA', name: 'Sun Pharma', price: 1100.00, sector: 'Health', trend: 0 },
+            { symbol: 'ASIANPAINT', name: 'Asian Paints', price: 3200.00, sector: 'Retail', trend: 0 },
+            { symbol: 'HCLTECH', name: 'HCL Technologies', price: 1200.00, sector: 'Technology', trend: 0 },
+            { symbol: 'TITAN', name: 'Titan Company', price: 3100.00, sector: 'Retail', trend: 0 },
+            { symbol: 'BAJFINANCE', name: 'Bajaj Finance', price: 7500.00, sector: 'Finance', trend: 0 },
+            { symbol: 'WIPRO', name: 'Wipro', price: 420.00, sector: 'Technology', trend: 0 }
+        ];
+
+        // Initialize historical data for chart (OHLC Structure)
+        const now = new Date();
+        stocks.forEach(s => {
+            s.history = [];
+            let currentPrice = s.price;
+
+            // Generate pseudo-historical data
+            for(let i=30; i>0; i--) {
+                const time = new Date(now.getTime() - i * 60000).valueOf(); // 1 minute intervals
+                const open = currentPrice;
+                const close = currentPrice * (0.995 + Math.random() * 0.01);
+                const high = Math.max(open, close) * (1 + Math.random() * 0.005);
+                const low = Math.min(open, close) * (1 - Math.random() * 0.005);
+
+                s.history.push({x: time, o: open, h: high, l: low, c: close});
+                currentPrice = close;
+            }
+            s.price = currentPrice; // Sync current price
+            // Create a fake "previous day" price for display purposes
+            s.prevClose = s.price * (0.98 + Math.random() * 0.04);
+            s.startPrice = s.history[0].c; // For daily P&L calculation (session open)
+        });
+
+        let user = {
+            cash: 50000,
+            portfolio: {}, // { AAPL: { qty: 10, avg: 150 } }
+            history: [],
+            alerts: [],
+            orders: [] // { id, symbol, type: 'limit_buy', price, qty }
+        };
+
+        let selectedSymbol = 'AAPL';
+        let chartInstance = null;
+        let botInterval = null;
+        let isDark = false;
+        let currentOrderType = 'market';
+        let currentChartType = 'line';
+
+        /* --- 2. INITIALIZATION & CORE LOOP --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTicker();
+            populateAlertSelect();
+            setInterval(marketSimulation, 2000); // Main price update loop
+            renderAll();
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            initChart();
+        }
+
+        /* --- 3. MARKET SIMULATION --- */
+        function marketSimulation() {
+            const now = Date.now();
+            stocks.forEach(s => {
+                // Generate new candle data based on last close
+                const lastCandle = s.history[s.history.length - 1];
+                const open = lastCandle.c;
+
+                // Random move
+                let percentChange = (Math.random() - 0.5) * 0.01;
+                let close = open * (1 + percentChange);
+
+                // Basic High/Low logic
+                let high = Math.max(open, close) * (1 + Math.random() * 0.002);
+                let low = Math.min(open, close) * (1 - Math.random() * 0.002);
+
+                // Update current price reference
+                s.price = close;
+                // Trend is calculated based on session open (startPrice)
+                s.trend = ((close - s.startPrice) / s.startPrice) * 100;
+
+                // Shift history
+                s.history.shift();
+                s.history.push({
+                    x: now,
+                    o: open,
+                    h: high,
+                    l: low,
+                    c: close
+                });
+            });
+
+            checkAlerts();
+            checkOrders();
+            if(botInterval) botLogic();
+            renderAll();
+        }
+
+        /* --- 4. UI RENDERING --- */
+        function renderAll() {
+            updateBalance();
+            updateTicker();
+            renderDashboardList();
+            if (chartInstance) updateChartData();
+            renderPortfolio();
+            renderOrders();
+            renderHeatmap();
+            renderScreener();
+            updateDock(); // Added function
+        }
+
+        function updateBalance() {
+            let invested = 0;
+            let dailyPL = 0;
+
+            Object.keys(user.portfolio).forEach(sym => {
+                const stock = stocks.find(s => s.symbol === sym);
+                const qty = user.portfolio[sym].qty;
+                if(stock) {
+                    invested += stock.price * qty;
+                    dailyPL += (stock.price - stock.startPrice) * qty;
+                }
+            });
+
+            const total = user.cash + invested;
+            document.getElementById('totalBalance').innerText = fmtMoney(total);
+            document.getElementById('cashBalance').innerText = fmtMoney(user.cash);
+
+            // Update dock power
+            const dockPower = document.getElementById('dockPower');
+            if(dockPower) dockPower.innerText = fmtMoney(user.cash);
+
+            const plEl = document.getElementById('dailyPL');
+            plEl.innerText = (dailyPL >= 0 ? '+' : '') + fmtMoney(dailyPL);
+            // Use standard classes for balance card text
+            plEl.style.color = dailyPL >= 0 ? '#4caf50' : '#ff5252';
+        }
+
+        function updateTicker() {
+            const container = document.getElementById('tickerContent');
+            let html = '';
+            stocks.forEach(s => {
+                const color = s.trend >= 0 ? 'text-success-custom' : 'text-danger-custom';
+                const arrowIcon = s.trend >= 0 ? '<i class="bi bi-caret-up-fill"></i>' : '<i class="bi bi-caret-down-fill"></i>';
+                html += `<span class="ticker-item">${s.symbol} <span class="${color}">${arrowIcon} ${s.price.toFixed(2)}</span></span>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function updateDock() {
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+            if(stock) {
+                document.getElementById('dockSymbol').innerText = stock.symbol;
+                const priceEl = document.getElementById('dockPrice');
+                priceEl.innerText = fmtMoney(stock.price);
+                priceEl.className = `fs-5 fw-bold ${stock.trend >= 0 ? 'text-success-custom' : 'text-danger-custom'}`;
+            }
+        }
+
+        function renderDashboardList() {
+            // Sort by absolute move magnitude
+            const movers = [...stocks].sort((a,b) => Math.abs(b.trend) - Math.abs(a.trend)).slice(0, 15);
+            const container = document.getElementById('topMoversList');
+            container.innerHTML = movers.map(s => {
+                const color = s.trend >= 0 ? 'text-success' : 'text-danger';
+                return `
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom list-row" onclick="selectStock('${s.symbol}')" style="cursor:pointer">
+                    <div>
+                        <div class="fw-bold">${s.symbol}</div>
+                        <small class="text-muted" style="font-size: 0.75em;">Prev Avg: $${s.prevClose.toFixed(2)}</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold">${s.price.toFixed(2)}</div>
+                        <small class="${color}">${s.trend > 0 ? '+' : ''}${s.trend.toFixed(2)}%</small>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        /* --- 5. CHARTING (Chart.js) --- */
+        function initChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+
+            // Default data for Line chart
+            const lineData = stock.history.map(d => ({x: d.x, y: d.c}));
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: stock.symbol,
+                        data: lineData,
+                        borderColor: '#2962ff',
+                        backgroundColor: 'rgba(41, 98, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: { unit: 'minute' },
+                            display: false
+                        },
+                        y: {
+                            grid: { color: isDark ? '#2b2b40' : '#e0e0e0' }
+                        }
+                    },
+                    animation: false
+                }
+            });
+        }
+
+        function updateChartData() {
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+            if (!stock || !chartInstance) return;
+
+            if (currentChartType === 'candlestick') {
+                chartInstance.data.datasets[0].data = stock.history;
+            } else {
+                chartInstance.data.datasets[0].data = stock.history.map(d => ({x: d.x, y: d.c}));
+                const color = stock.trend >= 0 ? '#00c853' : '#d50000';
+                chartInstance.data.datasets[0].borderColor = color;
+                chartInstance.data.datasets[0].backgroundColor = color + '20';
+            }
+            chartInstance.update('none');
+        }
+
+        function updateChartType(type) {
+            if(!chartInstance) return;
+            currentChartType = type;
+
+            document.querySelectorAll('.btn-group button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${type === 'candlestick' ? 'candle' : type}`).classList.add('active');
+
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+
+            if (type === 'candlestick') {
+                chartInstance.config.type = 'candlestick';
+                chartInstance.data.datasets[0] = {
+                    label: stock.symbol,
+                    data: stock.history,
+                    color: { up: '#00c853', down: '#d50000', unchanged: '#6c757d' },
+                    borderColor: '#6c757d',
+                    borderWidth: 1
+                };
+            } else {
+                chartInstance.config.type = type;
+                chartInstance.data.datasets[0] = {
+                    label: stock.symbol,
+                    data: stock.history.map(d => ({x: d.x, y: d.c})),
+                    borderColor: '#2962ff',
+                    backgroundColor: 'rgba(41, 98, 255, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: type === 'line',
+                    pointRadius: 0
+                };
+            }
+            chartInstance.update();
+        }
+
+        function selectStock(sym) {
+            selectedSymbol = sym;
+            const stock = stocks.find(s => s.symbol === sym);
+            document.getElementById('chartTitle').innerText = `${stock.symbol} - ${stock.name}`;
+
+            // Dock update handled by render loop, but force immediate update
+            updateDock();
+
+            updateChartType(currentChartType);
+        }
+
+        /* --- 6. TRADING SYSTEM --- */
+        function openTradeModal(side) {
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+            document.getElementById('modalTitle').innerText = `${side.toUpperCase()} ${stock.symbol}`;
+            document.getElementById('modalPriceDisplay').innerText = fmtMoney(stock.price);
+            document.getElementById('tradeQty').value = 1;
+
+            const btnBuy = document.getElementById('btnBuy');
+            const btnSell = document.getElementById('btnSell');
+
+            if (side === 'buy') {
+                btnBuy.style.display = 'block';
+                btnSell.style.display = 'none';
+            } else {
+                btnBuy.style.display = 'none';
+                btnSell.style.display = 'block';
+            }
+
+            setOrderType('market');
+            calculateTotal();
+            new bootstrap.Modal(document.getElementById('tradeModal')).show();
+        }
+
+        function setOrderType(type) {
+            currentOrderType = type;
+            document.getElementById('tab-market').classList.toggle('active', type === 'market');
+            document.getElementById('tab-market').classList.toggle('shadow-sm', type === 'market');
+            document.getElementById('tab-limit').classList.toggle('active', type === 'limit');
+            document.getElementById('tab-limit').classList.toggle('shadow-sm', type === 'limit');
+            document.getElementById('limitPriceContainer').style.display = type === 'limit' ? 'block' : 'none';
+        }
+
+        function adjQty(delta) {
+            const el = document.getElementById('tradeQty');
+            let val = parseInt(el.value) + delta;
+            if(val < 1) val = 1;
+            el.value = val;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+            const qty = parseInt(document.getElementById('tradeQty').value);
+            let price = stock.price;
+
+            if(currentOrderType === 'limit') {
+                const limitPrice = parseFloat(document.getElementById('tradeTargetPrice').value);
+                if(limitPrice) price = limitPrice;
+            }
+
+            document.getElementById('tradeTotal').innerText = fmtMoney(price * qty);
+        }
+
+        function executeTrade(side) {
+            const qty = parseInt(document.getElementById('tradeQty').value);
+            const stock = stocks.find(s => s.symbol === selectedSymbol);
+            const total = qty * stock.price;
+
+            // Handle Limit Orders
+            if(currentOrderType === 'limit') {
+                const limitPrice = parseFloat(document.getElementById('tradeTargetPrice').value);
+                if(!limitPrice) return showToast('Please set a valid limit price', 'error');
+
+                user.orders.push({
+                    id: Date.now(),
+                    symbol: selectedSymbol,
+                    type: side === 'buy' ? 'limit_buy' : 'limit_sell',
+                    price: limitPrice,
+                    qty: qty,
+                    time: new Date().toLocaleTimeString()
+                });
+                showToast(`Limit Order Placed: ${side.toUpperCase()} ${qty} ${stock.symbol} @ ${limitPrice}`, 'info');
+                bootstrap.Modal.getInstance(document.getElementById('tradeModal')).hide();
+                renderOrders();
+                return;
+            }
+
+            // Handle Market Orders
+            if (side === 'buy') {
+                if (user.cash >= total) {
+                    user.cash -= total;
+                    if (!user.portfolio[stock.symbol]) {
+                        user.portfolio[stock.symbol] = { qty: 0, avg: 0 };
+                    }
+                    let oldCost = user.portfolio[stock.symbol].qty * user.portfolio[stock.symbol].avg;
+                    user.portfolio[stock.symbol].qty += qty;
+                    user.portfolio[stock.symbol].avg = (oldCost + total) / user.portfolio[stock.symbol].qty;
+
+                    logTrade(side, stock.symbol, qty, stock.price);
+                    showToast(`Bought ${qty} ${stock.symbol} successfully`, 'success');
+                } else {
+                    showToast('Insufficient Funds', 'error');
+                }
+            } else {
+                if (user.portfolio[stock.symbol] && user.portfolio[stock.symbol].qty >= qty) {
+                    user.cash += total;
+                    user.portfolio[stock.symbol].qty -= qty;
+                    if (user.portfolio[stock.symbol].qty === 0) delete user.portfolio[stock.symbol];
+
+                    logTrade(side, stock.symbol, qty, stock.price);
+                    showToast(`Sold ${qty} ${stock.symbol} successfully`, 'success');
+                } else {
+                    showToast('Insufficient Shares', 'error');
+                }
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('tradeModal')).hide();
+            renderAll();
+        }
+
+        function checkOrders() {
+            for(let i = user.orders.length - 1; i >= 0; i--) {
+                const order = user.orders[i];
+                const stock = stocks.find(s => s.symbol === order.symbol);
+                let executed = false;
+
+                if(order.type === 'limit_buy' && stock.price <= order.price) {
+                    if(user.cash >= order.price * order.qty) {
+                         user.cash -= order.price * order.qty;
+                         if(!user.portfolio[order.symbol]) user.portfolio[order.symbol] = {qty:0, avg:0};
+                         user.portfolio[order.symbol].qty += order.qty;
+                         executed = true;
+                         logTrade('buy (limit)', order.symbol, order.qty, order.price);
+                         showToast(`Limit Buy Executed: ${order.symbol}`, 'success');
+                    }
+                } else if (order.type === 'limit_sell' && stock.price >= order.price) {
+                    if(user.portfolio[order.symbol] && user.portfolio[order.symbol].qty >= order.qty) {
+                        user.cash += order.price * order.qty;
+                        user.portfolio[order.symbol].qty -= order.qty;
+                        if(user.portfolio[order.symbol].qty === 0) delete user.portfolio[order.symbol];
+                        executed = true;
+                        logTrade('sell (limit)', order.symbol, order.qty, order.price);
+                        showToast(`Limit Sell Executed: ${order.symbol}`, 'success');
+                    }
+                }
+
+                if(executed) {
+                    user.orders.splice(i, 1);
+                }
+            }
+        }
+
+        /* --- 7. PORTFOLIO & HISTORY --- */
+        function renderPortfolio() {
+            const tbody = document.getElementById('portfolioTableBody');
+            const entries = Object.entries(user.portfolio);
+
+            if(entries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center p-5 text-muted">No holdings yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = entries.map(([sym, data]) => {
+                const stock = stocks.find(s => s.symbol === sym);
+                const currentVal = stock.price * data.qty;
+                const costBasis = data.avg * data.qty;
+                const profit = currentVal - costBasis;
+                const profitP = (profit / costBasis) * 100;
+                const color = profit >= 0 ? 'text-success-custom' : 'text-danger-custom';
+
+                return `
+                <tr onclick="selectStock('${sym}'); showSection('dashboard')" style="cursor:pointer" class="list-row">
+                    <td class="fw-bold ps-4">${sym}</td>
+                    <td>${data.qty}</td>
+                    <td>${fmtMoney(data.avg)}</td>
+                    <td>${fmtMoney(stock.price)}</td>
+                    <td class="${color}">${fmtMoney(profit)}</td>
+                    <td class="${color}">${profitP.toFixed(2)}%</td>
+                    <td class="pe-4 text-end"><button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); openTradeModal('sell')">Sell</button></td>
+                </tr>`;
+            }).join('');
+        }
+
+        function logTrade(type, sym, qty, price) {
+            user.history.unshift({
+                time: new Date().toLocaleString(),
+                type, sym, qty, price, total: qty * price
+            });
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            if(user.history.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted p-4">No trade history</div>';
+                return;
+            }
+            container.innerHTML = user.history.map(h => `
+                <div class="card mb-2 shadow-sm border-0">
+                    <div class="card-body p-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge ${h.type.includes('buy') ? 'bg-success' : 'bg-danger'} me-2">${h.type.toUpperCase()}</span>
+                            <span class="fw-bold">${h.sym}</span>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-bold">${h.qty} @ ${fmtMoney(h.price)}</div>
+                            <small class="text-muted">${h.time}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderOrders() {
+            const tbody = document.getElementById('ordersTableBody');
+            if(user.orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted p-4">No active orders</td></tr>';
+                return;
+            }
+            tbody.innerHTML = user.orders.map(o => `
+                <tr class="list-row">
+                    <td class="ps-4">${o.time}</td>
+                    <td><span class="badge ${o.type.includes('buy') ? 'bg-success' : 'bg-danger'}">${o.type.toUpperCase()}</span></td>
+                    <td>${o.symbol}</td>
+                    <td>${fmtMoney(o.price)}</td>
+                    <td>${o.qty}</td>
+                    <td>Pending</td>
+                    <td class="text-end pe-4"><button class="btn btn-sm btn-danger py-0" onclick="cancelOrder(${o.id})">Cancel</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function cancelOrder(id) {
+            user.orders = user.orders.filter(o => o.id !== id);
+            renderOrders();
+            showToast('Order Cancelled', 'info');
+        }
+
+        /* --- 8. TOOLS --- */
+        function renderScreener() {
+            const input = document.getElementById('screenerSearch').value.toLowerCase();
+            const sector = document.getElementById('screenerSector').value;
+            const trend = document.getElementById('screenerTrend').value;
+
+            const filtered = stocks.filter(s => {
+                const matchName = s.symbol.toLowerCase().includes(input) || s.name.toLowerCase().includes(input);
+                const matchSector = sector === 'all' || s.sector === sector;
+                let matchTrend = true;
+                if (trend === 'up') matchTrend = s.trend > 0;
+                if (trend === 'down') matchTrend = s.trend < 0;
+
+                return matchName && matchSector && matchTrend;
+            });
+
+            const grid = document.getElementById('screenerGrid');
+            grid.innerHTML = filtered.map(s => {
+                const color = s.trend >= 0 ? 'text-success-custom' : 'text-danger-custom';
+                return `
+                <div class="col-xxl-2 col-xl-3 col-lg-4 col-6 mb-3">
+                    <div class="stock-card h-100" onclick="selectStock('${s.symbol}'); showSection('dashboard')">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="mb-0 fw-bold text-truncate" title="${s.symbol}">${s.symbol}</h5>
+                            <span class="${color} fw-bold bg-light px-2 py-1 rounded small" style="font-size: 0.75rem;">${s.trend > 0 ? '+' : ''}${s.trend.toFixed(2)}%</span>
+                        </div>
+                        <div class="text-muted small mb-3 text-truncate" title="${s.name}">${s.name}</div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <div class="fw-bold fs-5">${fmtMoney(s.price)}</div>
+                            <div class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size: 0.7rem;">${s.sector}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function filterScreener() { renderScreener(); }
+
+        function renderHeatmap() {
+            const container = document.getElementById('heatmapContainer');
+            container.innerHTML = stocks.map(s => {
+                let hue = s.trend >= 0 ? 145 : 0;
+                let opacity = Math.min(Math.abs(s.trend) * 0.4 + 0.3, 1);
+                return `
+                <div class="heatmap-cell shadow-sm" style="background-color: hsla(${hue}, 70%, 40%, ${opacity})" onclick="selectStock('${s.symbol}'); showSection('dashboard')">
+                    <div class="fw-bold fs-5">${s.symbol}</div>
+                    <div class="small">${s.trend > 0 ? '+' : ''}${s.trend.toFixed(2)}%</div>
+                </div>`;
+            }).join('');
+        }
+
+        /* --- 9. ALERTS & BOT --- */
+        function populateAlertSelect() {
+            const sel = document.getElementById('alertSymbol');
+            sel.innerHTML = stocks.map(s => `<option value="${s.symbol}">${s.symbol}</option>`).join('');
+        }
+
+        function addAlert() {
+            const sym = document.getElementById('alertSymbol').value;
+            const price = parseFloat(document.getElementById('alertPrice').value);
+            const cond = document.getElementById('alertCondition').value;
+
+            if(!price) return;
+
+            user.alerts.push({ id: Date.now(), sym, price, cond });
+            document.getElementById('alertBadge').innerText = user.alerts.length;
+            document.getElementById('alertBadge').style.display = 'flex';
+            renderAlertsList();
+            showToast('Alert Set Successfully', 'success');
+        }
+
+        function renderAlertsList() {
+            const list = document.getElementById('alertsList');
+            if(user.alerts.length === 0) {
+                list.innerHTML = '<li class="list-group-item bg-transparent text-muted text-center">No active alerts</li>';
+                return;
+            }
+            list.innerHTML = user.alerts.map(a => `
+                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                    <span><strong>${a.sym}</strong> ${a.cond} ${a.price}</span>
+                    <button class="btn btn-sm btn-outline-danger py-0" onclick="removeAlert(${a.id})">&times;</button>
+                </li>
+            `).join('');
+        }
+
+        function removeAlert(id) {
+            user.alerts = user.alerts.filter(a => a.id !== id);
+            const badge = document.getElementById('alertBadge');
+            badge.innerText = user.alerts.length;
+            if(user.alerts.length === 0) badge.style.display = 'none';
+            renderAlertsList();
+        }
+
+        function checkAlerts() {
+            for (let i = user.alerts.length - 1; i >= 0; i--) {
+                const alert = user.alerts[i];
+                const stock = stocks.find(s => s.symbol === alert.sym);
+                let triggered = false;
+
+                if (alert.cond === 'above' && stock.price > alert.price) triggered = true;
+                if (alert.cond === 'below' && stock.price < alert.price) triggered = true;
+
+                if (triggered) {
+                    showToast(`🔔 ALERT: ${stock.symbol} is now ${alert.cond} ${alert.price}`, 'info');
+                    user.alerts.splice(i, 1);
+                    removeAlert(alert.id);
+                }
+            }
+        }
+
+        function toggleBot() {
+            const btn = document.getElementById('botToggleBtn');
+            const status = document.getElementById('botStatusText');
+
+            if (botInterval) {
+                clearInterval(botInterval);
+                botInterval = null;
+                btn.innerText = "START BOT";
+                btn.className = "btn btn-lg btn-success w-50 shadow-sm";
+                status.innerText = "STOPPED";
+                status.className = "fw-bold text-danger";
+            } else {
+                botInterval = setInterval(botLogic, 3000);
+                btn.innerText = "STOP BOT";
+                btn.className = "btn btn-lg btn-danger w-50 shadow-sm";
+                status.innerText = "RUNNING";
+                status.className = "fw-bold text-success";
+                showToast('Algorithmic Trading Bot Started', 'success');
+            }
+        }
+
+        let botTrades = 0;
+        function botLogic() {
+            const stock = stocks[Math.floor(Math.random() * stocks.length)];
+            const action = Math.random() > 0.5 ? 'buy' : 'sell';
+            const qty = Math.floor(Math.random() * 5) + 1;
+
+            const log = document.getElementById('botLog');
+            const entry = document.createElement('div');
+            entry.className = "mb-1 text-monospace small";
+            entry.innerHTML = `<span class="text-muted">[${new Date().toLocaleTimeString()}]</span> ${action.toUpperCase()} <span class="fw-bold">${stock.symbol}</span> (Signal: ${Math.random().toFixed(2)})`;
+            log.prepend(entry);
+
+            if(action === 'buy' && user.cash > stock.price * qty) {
+                user.cash -= stock.price * qty;
+                if (!user.portfolio[stock.symbol]) user.portfolio[stock.symbol] = { qty: 0, avg: 0 };
+                user.portfolio[stock.symbol].qty += qty;
+                botTrades++;
+            } else if (action === 'sell' && user.portfolio[stock.symbol] && user.portfolio[stock.symbol].qty >= qty) {
+                user.cash += stock.price * qty;
+                user.portfolio[stock.symbol].qty -= qty;
+                if (user.portfolio[stock.symbol].qty === 0) delete user.portfolio[stock.symbol];
+                botTrades++;
+            }
+
+            document.getElementById('botTradesCount').innerText = botTrades;
+            renderAll();
+        }
+
+        /* --- UTILS --- */
+        function fmtMoney(num) {
+            return '$' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.content-section').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.sidebar-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(id + 'Section').style.display = 'block';
+            document.getElementById('nav-' + id).classList.add('active');
+
+            if(id === 'screener') renderScreener();
+            if(id === 'heatmap') renderHeatmap();
+            if(id === 'dashboard' && window.innerWidth < 992) window.scrollTo(0,0);
+        }
+
+        function toggleTheme() {
+            isDark = !isDark;
+            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeBtn').innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+
+            if(chartInstance) {
+                chartInstance.options.scales.y.grid.color = isDark ? '#2b2b40' : '#e0e0e0';
+                chartInstance.update();
+            }
+        }
+
+        function showToast(msg, type) {
+            const toastArea = document.getElementById('toastArea');
+            const el = document.createElement('div');
+            el.className = `toast align-items-center text-white bg-${type === 'error' ? 'danger' : (type === 'success' ? 'success' : 'dark')} border-0 show mb-2 shadow`;
+            let icon = '';
+            if (msg.includes('ALERT')) icon = '<i class="bi bi-bell-fill me-2"></i>';
+
+            el.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${icon}${msg}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>`;
+            toastArea.appendChild(el);
+            setTimeout(() => el.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
