@@ -115,12 +115,14 @@
             overflow: hidden;
             transition: all 0.3s;
         }
+
         .sidebar-profile img {
             width: 40px;
             height: 40px;
             transition: all 0.3s;
             object-fit: cover;
         }
+
         .sidebar-profile .profile-text {
             opacity: 0;
             max-height: 0;
@@ -139,11 +141,13 @@
             .sidebar:hover .sidebar-btn span {
                 opacity: 1;
             }
+
             .sidebar:hover .sidebar-profile img {
                 width: 80px;
                 height: 80px;
                 margin-bottom: 10px;
             }
+
             .sidebar:hover .sidebar-profile .profile-text {
                 opacity: 1;
                 max-height: 60px;
@@ -189,11 +193,13 @@
         .main-wrapper {
             margin-left: var(--sidebar-width-collapsed);
             margin-top: var(--header-height);
-            padding: 20px 20px 100px 20px;
+            padding: 10px;
             transition: margin-left 0.3s;
             height: calc(100vh - var(--header-height));
-            overflow-y: auto;
+            overflow: hidden;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         @media (max-width: 768px) {
@@ -273,8 +279,8 @@
         .stock-card {
             background: var(--bg-primary);
             border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 10px;
+            margin-bottom: 10px;
             border: 1px solid var(--border-color);
             box-shadow: var(--card-shadow);
             transition: transform 0.2s;
@@ -285,10 +291,12 @@
             border-radius: 16px;
             padding: 10px;
             border: 1px solid var(--border-color);
-            margin-bottom: 20px;
+            margin-bottom: 0;
             box-shadow: var(--card-shadow);
-            height: auto;
+            height: 100%;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         @media (max-width: 768px) {
@@ -329,12 +337,12 @@
         }
 
         .trade-dock {
-            position: fixed;
+            position: absolute;
             bottom: 0;
-            left: var(--sidebar-width-collapsed);
+            left: 0;
             right: 0;
             background: rgba(255, 255, 255, 0.95);
-            padding: 15px 40px;
+            padding: 10px 20px;
             border-top: 1px solid var(--border-color);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
             z-index: 1040;
@@ -401,8 +409,9 @@
             overflow: hidden;
             white-space: nowrap;
             font-size: 0.85rem;
-            margin-top: -20px;
-            margin-bottom: 20px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            flex-shrink: 0;
         }
 
         .ticker-content {
@@ -481,6 +490,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         /* Welcome Page Styles */
@@ -499,6 +509,7 @@
             color: white;
             text-align: center;
         }
+
         .welcome-logo {
             font-size: 6rem;
             margin-bottom: 20px;
@@ -506,19 +517,38 @@
             color: var(--success);
             text-shadow: 0 0 30px rgba(0, 200, 83, 0.6);
         }
+
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
+
         .welcome-content {
             opacity: 0;
             animation: fadeInUp 1s ease-out forwards 0.5s;
         }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .btn-welcome {
             padding: 12px 40px;
             font-size: 1.2rem;
@@ -530,14 +560,16 @@
             transition: transform 0.2s, box-shadow 0.2s;
             margin-top: 30px;
         }
+
         .btn-welcome:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        
+
         .draggable-widget {
             cursor: move;
         }
+
         .draggable-widget.dragging {
             opacity: 0.5;
             border: 2px dashed var(--primary);
@@ -576,7 +608,8 @@
                     <div class="mb-3">
                         <div id="usernameContainer" style="display: none;" class="mb-3">
                             <label class="form-label text-muted small fw-bold">USERNAME</label>
-                            <input type="text" id="usernameInput" class="form-control form-control-lg bg-light" placeholder="Trader123">
+                            <input type="text" id="usernameInput" class="form-control form-control-lg bg-light"
+                                placeholder="Trader123">
                         </div>
                         <label class="form-label text-muted small fw-bold">USERNAME / EMAIL</label>
                         <input type="text" id="emailInput" class="form-control form-control-lg bg-light"
@@ -587,7 +620,8 @@
                         <input type="password" id="passwordInput" class="form-control form-control-lg bg-light"
                             placeholder="••••••" required>
                         <div class="text-end mt-1" id="forgotPassContainer">
-                            <span class="text-primary small cursor-pointer fw-bold" onclick="toggleForgotPassMode()">Forgot Password?</span>
+                            <span class="text-primary small cursor-pointer fw-bold"
+                                onclick="toggleForgotPassMode()">Forgot Password?</span>
                         </div>
                     </div>
                     <div class="mb-4" id="confirmPassContainer" style="display: none;">
@@ -604,10 +638,12 @@
                 </form>
                 <form id="forgotPassForm" onsubmit="handleResetPass(event)" style="display: none;">
                     <h5 class="text-center mb-4 fw-bold">Reset Password</h5>
-                    <p class="text-muted small text-center mb-4">Enter your email address and we'll send you a link to reset your password.</p>
+                    <p class="text-muted small text-center mb-4">Enter your email address and we'll send you a link to
+                        reset your password.</p>
                     <div class="mb-4">
                         <label class="form-label text-muted small fw-bold">EMAIL ADDRESS</label>
-                        <input type="email" id="resetEmailInput" class="form-control form-control-lg bg-light" placeholder="name@example.com" required>
+                        <input type="email" id="resetEmailInput" class="form-control form-control-lg bg-light"
+                            placeholder="name@example.com" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 btn-lg shadow-sm fw-bold mb-3">SEND LINK</button>
                     <div class="text-center">
@@ -618,132 +654,214 @@
         </div>
     </div>
 
-    <div id="adminPanel" style="display: none; background: var(--bg-secondary);">
-        <nav
-            class="navbar navbar-custom d-flex justify-content-between align-items-center bg-dark text-white border-bottom-0">
-            <div class="d-flex align-items-center">
-                <div class="fw-bold fs-4 me-2"><i class="bi bi-shield-lock-fill"></i></div>
-                <span class="fw-bold fs-5 d-none d-sm-inline">StockTrade Admin</span>
+    <div id="adminPanel" style="display: none; background: #f8f9fa; min-height: 100vh;">
+        <div class="d-flex h-100">
+            <!-- Admin Sidebar -->
+            <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
+                style="width: 250px; height: 100vh; position: fixed; top: 0; left: 0; overflow-y: auto; z-index: 1040;">
+                <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <i class="bi bi-shield-lock-fill fs-4 me-2"></i>
+                    <span class="fs-4 fw-bold">Admin<span class="text-primary">Panel</span></span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active bg-primary" onclick="return false;">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white"
+                            onclick="document.getElementById('adminUsersSection').scrollIntoView({behavior: 'smooth'})">
+                            <i class="bi bi-people me-2"></i> Users
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white"
+                            onclick="document.getElementById('adminLogsSection').scrollIntoView({behavior: 'smooth'})">
+                            <i class="bi bi-file-text me-2"></i> Logs
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=random" alt="" width="32"
+                            height="32" class="rounded-circle me-2">
+                        <strong>Administrator</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#" onclick="logout()">Sign out</a></li>
+                    </ul>
+                </div>
             </div>
-            <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="logout()">
-                <i class="bi bi-box-arrow-right"></i> Logout
-            </button>
-        </nav>
-        <div class="admin-wrapper container-fluid p-4" style="height: 100vh; overflow-y: auto;">
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="stock-card p-3 text-center h-100 d-flex flex-column justify-content-center">
-                        <h6 class="text-muted text-uppercase small fw-bold">Total Users</h6>
-                        <h2 class="fw-bold mb-0" id="adminTotalUsers">0</h2>
+
+            <!-- Admin Content -->
+            <div class="flex-grow-1 p-4" style="margin-left: 250px;">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
+                    <h1 class="h2 fw-bold text-dark">Dashboard Overview</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-2"
+                            onclick="renderAdminData()">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh Data
+                        </button>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stock-card p-3 text-center h-100 d-flex flex-column justify-content-center">
-                        <h6 class="text-muted text-uppercase small fw-bold">Total System Cash</h6>
-                        <h2 class="fw-bold mb-0 text-success" id="adminTotalCash">$0</h2>
+
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100 border-start border-4 border-primary">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">Total Users</h6>
+                                <h2 class="fw-bold mb-0 text-dark" id="adminTotalUsers">0</h2>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stock-card p-3 text-center h-100 d-flex flex-column justify-content-center">
-                        <h6 class="text-muted text-uppercase small fw-bold">Total Trades</h6>
-                        <h2 class="fw-bold mb-0 text-primary" id="adminTotalTrades">0</h2>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100 border-start border-4 border-success">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">Total System Cash</h6>
+                                <h2 class="fw-bold mb-0 text-success" id="adminTotalCash">$0</h2>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stock-card p-3 text-center h-100 d-flex flex-column justify-content-center">
-                        <h6 class="text-muted text-uppercase small fw-bold">Market Status</h6>
-                        <div class="form-check form-switch d-flex justify-content-center align-items-center gap-2 mt-2">
-                            <input class="form-check-input" type="checkbox" id="marketToggle" checked
-                                onchange="toggleMarket()">
-                            <label class="form-check-label fw-bold text-success" id="marketStatusLabel">OPEN</label>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100 border-start border-4 border-info">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">Total Trades</h6>
+                                <h2 class="fw-bold mb-0 text-primary" id="adminTotalTrades">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100 border-start border-4 border-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">Market Status</h6>
+                                <div class="form-check form-switch d-flex align-items-center gap-2">
+                                    <input class="form-check-input" type="checkbox" id="marketToggle" checked
+                                        onchange="toggleMarket()">
+                                    <label class="form-check-label fw-bold text-success"
+                                        id="marketStatusLabel">OPEN</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="stock-card h-100">
-                        <h5 class="fw-bold mb-3">Market Control</h5>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-success flex-fill fw-bold" onclick="manipulateMarket('bull')"><i
-                                    class="bi bi-graph-up-arrow"></i> Bull Run</button>
-                            <button class="btn btn-danger flex-fill fw-bold" onclick="manipulateMarket('bear')"><i
-                                    class="bi bi-graph-down-arrow"></i> Market Crash</button>
-                            <button class="btn btn-warning flex-fill fw-bold" onclick="manipulateMarket('stabilize')"><i
-                                    class="bi bi-activity"></i> Stabilize</button>
-                        </div>
-                        <small class="text-muted mt-2 d-block">Force market trends globally.</small>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="stock-card h-100">
-                        <h5 class="fw-bold mb-3">System Broadcast</h5>
-                        <div class="input-group">
-                            <input type="text" id="broadcastMsg" class="form-control"
-                                placeholder="Message to all users...">
-                            <button class="btn btn-primary fw-bold" onclick="sendBroadcast()"><i
-                                    class="bi bi-megaphone-fill"></i> Send</button>
+
+                <!-- Operations -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white fw-bold border-bottom-0 pt-3">Market Control</div>
+                            <div class="card-body">
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-success flex-fill fw-bold"
+                                        onclick="manipulateMarket('bull')"><i class="bi bi-graph-up-arrow"></i> Bull
+                                        Run</button>
+                                    <button class="btn btn-danger flex-fill fw-bold"
+                                        onclick="manipulateMarket('bear')"><i class="bi bi-graph-down-arrow"></i> Market
+                                        Crash</button>
+                                    <button class="btn btn-warning flex-fill fw-bold"
+                                        onclick="manipulateMarket('stabilize')"><i class="bi bi-activity"></i>
+                                        Stabilize</button>
+                                </div>
+                                <small class="text-muted mt-2 d-block">Force market trends globally.</small>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-lg-8 mb-4 mb-lg-0">
-                    <div class="stock-card p-3 h-100">
-                        <h5 class="fw-bold mb-3">User Wealth Distribution</h5>
-                        <div id="adminWealthChart" style="height: 300px;"></div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white fw-bold border-bottom-0 pt-3">System Broadcast</div>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input type="text" id="broadcastMsg" class="form-control"
+                                        placeholder="Message to all users...">
+                                    <button class="btn btn-primary fw-bold" onclick="sendBroadcast()"><i
+                                            class="bi bi-megaphone-fill"></i> Send</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="stock-card p-3 h-100">
-                        <h5 class="fw-bold mb-3">Top Performers</h5>
+
+                <!-- Analytics -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white fw-bold border-bottom-0 pt-3">User Wealth Distribution
+                            </div>
+                            <div class="card-body">
+                                <div id="adminWealthChart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white fw-bold border-bottom-0 pt-3">Top Performers</div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-borderless align-middle mb-0">
+                                        <thead class="text-muted small text-uppercase bg-light">
+                                            <tr>
+                                                <th class="ps-3">User</th>
+                                                <th class="text-end pe-3">Net Worth</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="adminTopPerformers"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Tables -->
+                <div id="adminUsersSection" class="mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="fw-bold text-dark mb-0">User Management</h4>
+                        <input type="text" id="adminUserSearch" class="form-control form-control-sm"
+                            style="width: 250px;" placeholder="Search by email..." onkeyup="filterAdminUsers()">
+                    </div>
+                    <div class="card border-0 shadow-sm overflow-hidden">
                         <div class="table-responsive">
-                            <table class="table table-borderless align-middle mb-0">
-                                <thead class="text-muted small text-uppercase">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
                                     <tr>
-                                        <th>User</th>
-                                        <th class="text-end">Net Worth</th>
+                                        <th class="ps-4">User Email</th>
+                                        <th>Cash Balance</th>
+                                        <th>Portfolio Size</th>
+                                        <th class="text-end pe-4">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="adminTopPerformers"></tbody>
+                                <tbody id="adminUserTable"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>
-            <h2 class="fw-bold mb-4">User Management</h2>
-            <div class="stock-card p-0 overflow-hidden">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="ps-4">User Email</th>
-                                <th>Cash Balance</th>
-                                <th>Portfolio Size</th>
-                                <th class="text-end pe-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminUserTable"></tbody>
-                    </table>
-                </div>
-            </div>
-            <h2 class="fw-bold mb-4 mt-5">Global Trade Log</h2>
-            <div class="stock-card p-0 overflow-hidden">
-                <div class="table-responsive" style="max-height: 400px;">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="ps-4">Time</th>
-                                <th>User</th>
-                                <th>Type</th>
-                                <th>Symbol</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                                <th class="text-end pe-4">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminTradeLog"></tbody>
-                    </table>
+
+                <div id="adminLogsSection">
+                    <h4 class="fw-bold mb-3 text-dark">Global Trade Log</h4>
+                    <div class="card border-0 shadow-sm overflow-hidden">
+                        <div class="table-responsive" style="max-height: 400px;">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Time</th>
+                                        <th>User</th>
+                                        <th>Type</th>
+                                        <th>Symbol</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th class="text-end pe-4">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminTradeLog"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -756,7 +874,8 @@
                 <button class="btn btn-link text-primary d-md-none me-2 p-0 fs-1" onclick="toggleMobileSidebar()">
                     <i class="bi bi-list"></i>
                 </button>
-                <button class="btn btn-link text-primary d-none d-md-block me-3 p-0 fs-4" onclick="toggleDesktopSidebar()">
+                <button class="btn btn-link text-primary d-none d-md-block me-3 p-0 fs-4"
+                    onclick="toggleDesktopSidebar()">
                     <i class="bi bi-list"></i>
                 </button>
                 <div class="fw-bold fs-4 text-primary me-2"><i class="bi bi-graph-up-arrow"></i></div>
@@ -784,10 +903,12 @@
 
         <div class="sidebar" id="sidebar">
             <div class="sidebar-profile d-flex flex-column align-items-center">
-                <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=User&background=random" class="rounded-circle shadow-sm border border-2 border-white">
+                <img id="sidebarAvatar" src="https://ui-avatars.com/api/?name=User&background=random"
+                    class="rounded-circle shadow-sm border border-2 border-white">
                 <div class="profile-text">
                     <div class="fw-bold text-truncate px-2" id="sidebarUsernameDisplay">User</div>
-                    <small class="text-muted text-truncate px-2 d-block" id="sidebarEmailDisplay" style="font-size: 0.75rem;"></small>
+                    <small class="text-muted text-truncate px-2 d-block" id="sidebarEmailDisplay"
+                        style="font-size: 0.75rem;"></small>
                 </div>
             </div>
             <button class="sidebar-btn active" onclick="showSection('dashboard')" id="nav-dashboard">
@@ -823,89 +944,103 @@
         </div>
 
         <div class="main-wrapper">
-            <div class="ticker-tape rounded mb-4 shadow-sm">
+            <div class="ticker-tape rounded shadow-sm">
                 <div class="ticker-content" id="tickerContent"></div>
             </div>
 
-            <div id="dashboardSection" class="content-section">
+            <div id="dashboardSection" class="content-section"
+                style="height: 100%; display: flex; flex-direction: column; padding-bottom: 70px; overflow: hidden;">
                 <!-- Top Stats Row -->
-                <div class="row g-3 mb-4" id="dashboardWidgets">
+                <div class="row g-2 mb-2" id="dashboardWidgets" style="flex-shrink: 0;">
                     <div class="col-xl-3 col-md-6 draggable-widget" draggable="true">
-                        <div class="stock-card p-3 h-100 border-start border-4 border-primary shadow-sm">
+                        <div class="stock-card p-2 h-100 border-start border-4 border-primary shadow-sm">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <small class="text-muted fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">Net Worth</small>
-                                    <h3 class="fw-bold mb-0 mt-1" id="totalBalance">$0.00</h3>
+                                    <small class="text-muted fw-bold text-uppercase"
+                                        style="font-size: 0.7rem; letter-spacing: 1px;">Net Worth</small>
+                                    <h4 class="fw-bold mb-0 mt-1" id="totalBalance">$0.00</h4>
                                 </div>
-                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary">
-                                    <i class="bi bi-wallet2 fs-4"></i>
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-2 text-primary">
+                                    <i class="bi bi-wallet2 fs-5"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 draggable-widget" draggable="true">
-                        <div class="stock-card p-3 h-100 border-start border-4 border-success shadow-sm">
+                        <div class="stock-card p-2 h-100 border-start border-4 border-success shadow-sm">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <small class="text-muted fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">Day's P&L</small>
-                                    <h3 class="fw-bold mb-0 mt-1" id="dailyPL">+$0.00</h3>
+                                    <small class="text-muted fw-bold text-uppercase"
+                                        style="font-size: 0.7rem; letter-spacing: 1px;">Day's P&L</small>
+                                    <h4 class="fw-bold mb-0 mt-1" id="dailyPL">+$0.00</h4>
                                 </div>
-                                <div class="rounded-circle bg-success bg-opacity-10 p-3 text-success">
-                                    <i class="bi bi-graph-up-arrow fs-4"></i>
+                                <div class="rounded-circle bg-success bg-opacity-10 p-2 text-success">
+                                    <i class="bi bi-graph-up-arrow fs-5"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 draggable-widget" draggable="true">
-                        <div class="stock-card p-3 h-100 border-start border-4 border-info shadow-sm">
+                        <div class="stock-card p-2 h-100 border-start border-4 border-info shadow-sm">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <small class="text-muted fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">Buying Power</small>
-                                    <h3 class="fw-bold mb-0 mt-1" id="cashBalance">$0.00</h3>
+                                    <small class="text-muted fw-bold text-uppercase"
+                                        style="font-size: 0.7rem; letter-spacing: 1px;">Buying Power</small>
+                                    <h4 class="fw-bold mb-0 mt-1" id="cashBalance">$0.00</h4>
                                 </div>
-                                <div class="rounded-circle bg-info bg-opacity-10 p-3 text-info">
-                                    <i class="bi bi-cash-stack fs-4"></i>
+                                <div class="rounded-circle bg-info bg-opacity-10 p-2 text-info">
+                                    <i class="bi bi-cash-stack fs-5"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6 draggable-widget" draggable="true">
-                        <div class="stock-card p-3 h-100 border-start border-4 border-warning shadow-sm">
+                        <div class="stock-card p-2 h-100 border-start border-4 border-warning shadow-sm">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <small class="text-muted fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">Sentiment</small>
-                                <small class="fw-bold badge bg-warning bg-opacity-10 text-warning" id="sentimentText">Neutral</small>
+                                <small class="text-muted fw-bold text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Sentiment</small>
+                                <small class="fw-bold badge bg-warning bg-opacity-10 text-warning"
+                                    id="sentimentText">Neutral</small>
                             </div>
                             <div class="progress" style="height: 6px;">
-                                <div class="progress-bar bg-warning" id="sentimentBar" role="progressbar" style="width: 50%"></div>
+                                <div class="progress-bar bg-warning" id="sentimentBar" role="progressbar"
+                                    style="width: 50%"></div>
                             </div>
                             <div class="mt-2 text-end small fw-bold text-muted" id="sentimentValue">50% Bullish</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-lg-9 col-md-12 mb-4">
-                        <div class="chart-container h-100 shadow-sm" style="min-height: 550px; padding: 20px;">
+                <div class="row g-2" style="flex-grow: 1; min-height: 0;">
+                    <div class="col-lg-9 col-md-12 h-100">
+                        <div class="chart-container shadow-sm" style="padding: 10px;">
                             <!-- Chart Header -->
-                            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
                                 <div>
                                     <h4 class="m-0 fw-bold" id="chartTitle">AAPL - Apple Inc.</h4>
                                     <div class="d-flex align-items-center gap-2 small text-muted mt-1">
                                         <span class="badge bg-light text-dark border">NASDAQ</span>
-                                        <span id="chartSubtitle"><i class="bi bi-circle-fill text-success" style="font-size: 6px; vertical-align: middle;"></i> Real-time Data</span>
+                                        <span id="chartSubtitle"><i class="bi bi-circle-fill text-success"
+                                                style="font-size: 6px; vertical-align: middle;"></i> Real-time
+                                            Data</span>
                                     </div>
                                 </div>
                                 <div class="d-flex gap-2 align-items-center">
-                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-secondary active" id="btn-candle" onclick="updateChartType('candlestick')"><i class="bi bi-bar-chart-fill"></i></button>
-                                        <button class="btn btn-outline-secondary" id="btn-line" onclick="updateChartType('area')"><i class="bi bi-graph-up"></i></button>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-secondary" id="btn-candle"
+                                            onclick="updateChartType('candlestick')"><i
+                                                class="bi bi-bar-chart-fill"></i></button>
+                                        <button class="btn btn-outline-secondary active" id="btn-line"
+                                            onclick="updateChartType('area')"><i class="bi bi-graph-up"></i></button>
                                     </div>
                                     <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle fw-bold" data-bs-toggle="dropdown">Indicators</button>
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle fw-bold"
+                                            data-bs-toggle="dropdown">Indicators</button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow">
                                             <li class="px-3 py-2">
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="checkSMA" onchange="updateChartData()">
+                                                    <input class="form-check-input" type="checkbox" id="checkSMA"
+                                                        onchange="updateChartData()">
                                                     <label class="form-check-label small fw-bold">SMA (10)</label>
                                                 </div>
                                             </li>
@@ -913,22 +1048,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="mainChart" style="height: calc(100% - 80px); width: 100%;"></div>
+                            <div id="mainChart" style="flex-grow: 1; width: 100%; min-height: 0;"></div>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-12 d-flex flex-column mb-4">
-                        <div class="stock-card flex-grow-1 p-0 overflow-hidden d-flex flex-column shadow-sm" style="height: 550px;">
+                    <div class="col-lg-3 col-md-12 d-flex flex-column h-100">
+                        <div class="stock-card flex-grow-1 p-0 overflow-hidden d-flex flex-column shadow-sm h-100">
                             <div class="p-2 border-bottom bg-light bg-opacity-50">
                                 <ul class="nav nav-pills nav-fill nav-justified" id="watchlistTabs">
                                     <li class="nav-item">
-                                        <a class="nav-link active py-2 small fw-bold" style="cursor: pointer; font-size: 0.8rem;" onclick="setSidebarMode('movers')" id="tab-movers">MOVERS</a>
+                                        <a class="nav-link active py-2 small fw-bold"
+                                            style="cursor: pointer; font-size: 0.8rem;"
+                                            onclick="setSidebarMode('movers')" id="tab-movers">MOVERS</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 small fw-bold" style="cursor: pointer; font-size: 0.8rem;" onclick="setSidebarMode('watchlist')" id="tab-watchlist">WATCHLIST</a>
+                                        <a class="nav-link py-2 small fw-bold"
+                                            style="cursor: pointer; font-size: 0.8rem;"
+                                            onclick="setSidebarMode('watchlist')" id="tab-watchlist">WATCHLIST</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 small fw-bold" style="cursor: pointer; font-size: 0.8rem;" onclick="setSidebarMode('leaders')" id="tab-leaders">LEADERS</a>
+                                        <a class="nav-link py-2 small fw-bold"
+                                            style="cursor: pointer; font-size: 0.8rem;"
+                                            onclick="setSidebarMode('leaders')" id="tab-leaders">LEADERS</a>
                                     </li>
                                 </ul>
                             </div>
@@ -938,7 +1079,7 @@
                 </div>
 
                 <div class="trade-dock">
-                    <div class="dock-info d-flex align-items-center gap-3">
+                    <div class="dock-info d-flex align-items-center gap-2">
                         <div>
                             <div class="text-uppercase text-muted fw-bold"
                                 style="font-size: 0.65rem; letter-spacing: 1px;">Quick Trade</div>
@@ -976,14 +1117,14 @@
                 </div>
             </div>
 
-            <div id="newsSection" class="content-section" style="display:none;">
+            <div id="newsSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold">Market News</h3><button class="btn btn-sm btn-outline-primary"
                         onclick="renderNews(true)"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
                 </div>
                 <div class="row" id="newsContainer"></div>
             </div>
-            <div id="searchSection" class="content-section" style="display:none;">
+            <div id="searchSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <h3 class="fw-bold mb-4">Stock Screener</h3>
                 <div class="stock-card p-4 mb-4">
                     <div class="row g-3">
@@ -1012,10 +1153,10 @@
                 </div>
                 <div class="row" id="screenerGrid"></div>
             </div>
-            <div id="portfolioSection" class="content-section" style="display:none;">
+            <div id="portfolioSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="fw-bold">My Portfolio</h3><button class="btn btn-outline-primary btn-sm"
-                        onclick="showToast('Exporting data...', 'info')"><i class="bi bi-download"></i> CSV</button>
+                    <h3 class="fw-bold">My Portfolio</h3><button class="btn btn-outline-primary btn-sm"><i
+                            class="bi bi-download"></i> CSV</button>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 mb-4">
@@ -1041,12 +1182,13 @@
                     <div class="col-lg-4 mb-4">
                         <div class="stock-card p-3 h-100">
                             <h5 class="fw-bold mb-3">Allocation by Sector</h5>
-                            <div id="portfolioPieChart" class="d-flex justify-content-center align-items-center" style="min-height: 300px;"></div>
+                            <div id="portfolioPieChart" class="d-flex justify-content-center align-items-center"
+                                style="min-height: 300px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="ordersSection" class="content-section" style="display:none;">
+            <div id="ordersSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <h3 class="fw-bold mb-4">Active Orders</h3>
                 <div class="stock-card p-0 overflow-hidden">
                     <div class="table-responsive">
@@ -1067,7 +1209,7 @@
                     </div>
                 </div>
             </div>
-            <div id="historySection" class="content-section" style="display:none;">
+            <div id="historySection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold mb-0">Trade History</h3>
                     <button class="btn btn-outline-danger btn-sm fw-bold" onclick="downloadHistoryPDF()">
@@ -1076,12 +1218,12 @@
                 </div>
                 <div id="historyList"></div>
             </div>
-            <div id="heatmapSection" class="content-section" style="display:none;">
+            <div id="heatmapSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <h3 class="fw-bold mb-4">Market Heatmap</h3>
                 <div id="heatmapContainer" class="heatmap-grid p-4 bg-white rounded shadow-sm"
                     style="background: var(--bg-primary) !important;"></div>
             </div>
-            <div id="botSection" class="content-section" style="display:none;">
+            <div id="botSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10">
                         <div class="stock-card p-4 p-md-5 text-center">
@@ -1109,7 +1251,7 @@
                     </div>
                 </div>
             </div>
-            <div id="alertsSection" class="content-section" style="display:none;">
+            <div id="alertsSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <h3 class="fw-bold mb-4">Price Alerts</h3>
                 <div class="row">
                     <div class="col-md-5 mb-4">
@@ -1135,28 +1277,27 @@
                     </div>
                 </div>
             </div>
-            <div id="settingsSection" class="content-section" style="display:none;">
+            <div id="settingsSection" class="content-section" style="display:none; height: 100%; overflow-y: auto;">
                 <h3 class="fw-bold mb-4">Account Settings</h3>
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="stock-card p-4 h-100">
                             <h5 class="fw-bold mb-3">Profile Settings</h5>
                             <div class="d-flex align-items-center gap-3">
-                                <img id="settingsAvatar" src="" class="rounded-circle bg-light" style="width: 80px; height: 80px; object-fit: cover;">
+                                <img id="settingsAvatar" src="" class="rounded-circle bg-light"
+                                    style="width: 80px; height: 80px; object-fit: cover;">
                                 <div>
-                                    <label class="btn btn-primary btn-sm fw-bold">
-                                        <i class="bi bi-upload me-2"></i>Upload Photo
-                                        <input type="file" hidden accept="image/*" onchange="uploadAvatar(this)">
-                                    </label>
-                                    <button class="btn btn-outline-danger btn-sm fw-bold ms-2" onclick="removeAvatar()">Remove</button>
-                                    <div class="small text-muted mt-2">Recommended: Square JPG/PNG</div>
+                                    <div class="fw-bold">Profile Picture</div>
+                                    <div class="small text-muted">Managed by System</div>
                                 </div>
                             </div>
                             <hr class="my-4 opacity-10">
                             <label class="small text-muted fw-bold mb-2">DISPLAY NAME</label>
                             <div class="input-group">
-                                <input type="text" id="settingsUsernameInput" class="form-control" placeholder="Set a custom username">
-                                <button class="btn btn-outline-primary fw-bold" onclick="updateUsername()">Update</button>
+                                <input type="text" id="settingsUsernameInput" class="form-control"
+                                    placeholder="Set a custom username">
+                                <button class="btn btn-outline-primary fw-bold"
+                                    onclick="updateUsername()">Update</button>
                             </div>
                         </div>
                     </div>
@@ -1280,7 +1421,7 @@
         let botInterval = null;
         let isDark = false;
         let currentOrderType = 'market';
-        let currentChartType = 'candlestick'; // Default to candle
+        let currentChartType = 'area'; // Default to line/area
         let sidebarMode = 'movers';
         let isSignUpMode = false;
         let isMarketOpen = true;
@@ -1291,7 +1432,7 @@
             updateTicker();
             populateAlertSelect();
             checkDailyBonus();
-            setInterval(marketSimulation, 2000);
+            setInterval(marketSimulation, 1000);
             renderNews(true);
             initDashboardDnD();
         });
@@ -1316,7 +1457,7 @@
                 if (currentUserEmail === 'admin') showAdminPanel();
                 else { loadUser(currentUserEmail); showApp(); }
                 const wp = document.getElementById('welcomePage');
-                if(wp) wp.style.display = 'none';
+                if (wp) wp.style.display = 'none';
             } else {
                 // Show welcome page initially
                 document.getElementById('welcomePage').style.display = 'flex';
@@ -1335,10 +1476,13 @@
                 if (email === 'admin') return showToast('Restricted', 'error');
                 const username = document.getElementById('usernameInput').value.trim();
                 const newUser = { email, username: username || email.split('@')[0], password: pass, cash: 50000, portfolio: {}, history: [], alerts: [], orders: [], watchlist: ['AAPL', 'TSLA', 'NVDA'], avatar: null };
-                users.push(newUser); localStorage.setItem(USERS_KEY, JSON.stringify(users)); loginSuccess(newUser);
+                users.push(newUser); localStorage.setItem(USERS_KEY, JSON.stringify(users));
+                showToast('Sign Up Successful!', 'success');
+                loginSuccess(newUser);
             } else {
                 const foundUser = users.find(u => u.email === email && u.password === pass);
-                if (foundUser) loginSuccess(foundUser); else showToast('Invalid credentials', 'error');
+                if (foundUser) { showToast('Login Successful!', 'success'); loginSuccess(foundUser); }
+                else showToast('Invalid credentials', 'error');
             }
         }
         function toggleForgotPassMode() {
@@ -1356,24 +1500,37 @@
             else showToast('Email not found', 'error');
         }
         function loginSuccess(u) { user = u; localStorage.setItem(SESSION_KEY, user.email); showApp(); }
-        function showApp() { 
-            document.getElementById('loginPage').style.display = 'none'; 
+        function showApp() {
+            document.getElementById('loginPage').style.display = 'none';
             document.getElementById('welcomePage').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'none'; 
-            document.getElementById('appContainer').style.display = 'block'; 
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
             const displayName = user.username || user.email;
-            document.getElementById('userEmailDisplay').innerText = displayName; 
+            document.getElementById('userEmailDisplay').innerText = displayName;
             document.getElementById('sidebarUsernameDisplay').innerText = user.username || 'Trader';
             document.getElementById('sidebarEmailDisplay').innerText = user.email;
             document.getElementById('settingsUsernameInput').value = user.username || '';
             updateAvatarDisplay();
-            initChart(); 
-            renderAll(); 
+            initChart();
+            renderAll();
         }
         function showAdminPanel() { document.getElementById('welcomePage').style.display = 'none'; document.getElementById('loginPage').style.display = 'none'; document.getElementById('appContainer').style.display = 'none'; document.getElementById('adminPanel').style.display = 'block'; renderAdminData(); }
         function logout() { localStorage.removeItem(SESSION_KEY); location.reload(); }
         function loadUser(email) { const users = JSON.parse(localStorage.getItem(USERS_KEY)) || []; const found = users.find(u => u.email === email); if (found) user = found; }
         function saveUserData() { const users = JSON.parse(localStorage.getItem(USERS_KEY)) || []; const index = users.findIndex(u => u.email === user.email); if (index !== -1) { users[index] = user; localStorage.setItem(USERS_KEY, JSON.stringify(users)); } }
+
+        function filterAdminUsers() {
+            const q = document.getElementById('adminUserSearch') ? document.getElementById('adminUserSearch').value.toLowerCase() : '';
+            const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            const filtered = users.filter(u => u.email.toLowerCase().includes(q));
+            renderAdminUserTable(filtered);
+        }
+
+        function renderAdminUserTable(users) {
+            const tbody = document.getElementById('adminUserTable');
+            if (!tbody) return;
+            tbody.innerHTML = users.length === 0 ? '<tr><td colspan="4" class="text-center p-3">No users found.</td></tr>' : users.map(u => `<tr><td class="ps-4 fw-bold">${u.email}</td><td>${fmtMoney(u.cash)}</td><td>${Object.keys(u.portfolio).length} Holdings</td><td class="text-end pe-4"><button class="btn btn-sm btn-outline-primary me-2" onclick="editUserBalance('${u.email}')">Edit Cash</button><button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.email}')">Delete</button></td></tr>`).join('');
+        }
 
         function renderAdminData() {
             const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
@@ -1408,7 +1565,7 @@
             document.getElementById('adminTotalTrades').innerText = allTrades.length;
 
             // Table
-            document.getElementById('adminUserTable').innerHTML = users.length === 0 ? '<tr><td colspan="4" class="text-center p-3">No users.</td></tr>' : users.map(u => `<tr><td class="ps-4 fw-bold">${u.email}</td><td>${fmtMoney(u.cash)}</td><td>${Object.keys(u.portfolio).length} Holdings</td><td class="text-end pe-4"><button class="btn btn-sm btn-outline-primary me-2" onclick="editUserBalance('${u.email}')">Edit Cash</button><button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${u.email}')">Delete</button></td></tr>`).join('');
+            filterAdminUsers();
 
             // Charts
             renderAdminCharts(users);
@@ -1483,7 +1640,6 @@
                     users[userIdx].cash = parseFloat(newBal);
                     localStorage.setItem(USERS_KEY, JSON.stringify(users));
                     renderAdminData();
-                    showToast('Balance updated', 'success');
                 }
             }
         }
@@ -1492,7 +1648,6 @@
             const lbl = document.getElementById('marketStatusLabel');
             lbl.innerText = isMarketOpen ? 'OPEN' : 'CLOSED';
             lbl.className = isMarketOpen ? 'form-check-label fw-bold text-success' : 'form-check-label fw-bold text-danger';
-            showToast(`Market is now ${isMarketOpen ? 'OPEN' : 'CLOSED'}`, 'info');
         }
         function manipulateMarket(type) {
             stocks.forEach(s => {
@@ -1500,12 +1655,10 @@
                 else if (type === 'bear') s.trend = -Math.abs(s.trend) - 2;
                 else s.trend = (Math.random() - 0.5);
             });
-            showToast(`Market set to ${type.toUpperCase()}`, 'info');
         }
         function sendBroadcast() {
             const msg = document.getElementById('broadcastMsg').value;
             if (msg) {
-                showToast(`Broadcast sent: "${msg}"`, 'success');
                 document.getElementById('broadcastMsg').value = '';
             }
         }
@@ -1534,7 +1687,6 @@
                     users[i].history.unshift({ time: new Date().toLocaleString(), type: 'bonus reward', sym: 'SYSTEM', qty: 1, price: prizes[i] });
                     if (user && users[i].email === user.email) {
                         user.cash = users[i].cash; user.history = users[i].history;
-                        showToast(`🏆 Daily Bonus! You won $${prizes[i]}`, 'success');
                     }
                     updated = true;
                 }
@@ -1571,7 +1723,7 @@
             const options = {
                 series: [],
                 chart: {
-                    type: 'candlestick',
+                    type: 'area',
                     height: '100%',
                     fontFamily: 'Inter, sans-serif',
                     background: 'transparent',
@@ -1716,7 +1868,16 @@
             document.getElementById('sentimentText').innerText = pct > 60 ? 'Strong Buy' : (pct < 40 ? 'Strong Sell' : 'Neutral');
         }
 
-        function selectStock(sym) { selectedSymbol = sym; const s = stocks.find(i => i.symbol === sym); document.getElementById('chartTitle').innerText = `${s.symbol} - ${s.name}`; updateDock(); updateChartData(); if (window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('mobile-open')) toggleMobileSidebar(); }
+        function selectStock(sym) {
+            selectedSymbol = sym;
+            const s = stocks.find(i => i.symbol === sym);
+            document.getElementById('chartTitle').innerText = `${s.symbol} - ${s.name}`;
+            updateDock();
+            // Reset chart zoom/pan when switching stocks
+            if (chart) chart.updateOptions({ xaxis: { min: undefined, max: undefined }, yaxis: { min: undefined, max: undefined } }, false, false);
+            updateChartData();
+            if (window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('mobile-open')) toggleMobileSidebar();
+        }
         function updateBalance() { let invested = 0, dailyPL = 0; Object.keys(user.portfolio).forEach(sym => { const s = stocks.find(i => i.symbol === sym); const qty = user.portfolio[sym].qty; invested += s.price * qty; dailyPL += (s.price - s.startPrice) * qty; }); document.getElementById('totalBalance').innerText = fmtMoney(user.cash + invested); document.getElementById('cashBalance').innerText = fmtMoney(user.cash); const pl = document.getElementById('dailyPL'); pl.innerText = (dailyPL >= 0 ? '+' : '') + fmtMoney(dailyPL); pl.style.color = dailyPL >= 0 ? '#4caf50' : '#ff5252'; document.getElementById('dockPower').innerText = fmtMoney(user.cash); }
         function updateTicker() { document.getElementById('tickerContent').innerHTML = stocks.map(s => `<span class="ticker-item">${s.symbol} <span class="${s.trend >= 0 ? 'text-success-custom' : 'text-danger-custom'}">${s.trend >= 0 ? '▲' : '▼'} ${s.price.toFixed(2)}</span></span>`).join(''); }
         function updateDock() { const s = stocks.find(i => i.symbol === selectedSymbol); document.getElementById('dockSymbol').innerText = s.symbol; const p = document.getElementById('dockPrice'); p.innerText = fmtMoney(s.price); p.className = `fs-5 fw-bold ${s.trend >= 0 ? 'text-success-custom' : 'text-danger-custom'}`; }
@@ -1727,44 +1888,44 @@
         function executeTrade(side) {
             const qty = parseInt(document.getElementById('tradeQty').value); const s = stocks.find(i => i.symbol === selectedSymbol); const total = qty * s.price;
             const sl = parseFloat(document.getElementById('tradeStopLoss').value); const tp = parseFloat(document.getElementById('tradeTakeProfit').value);
-            if (currentOrderType === 'limit') { const lp = parseFloat(document.getElementById('tradeTargetPrice').value); if (!lp) return showToast('Invalid Limit', 'error'); user.orders.push({ id: Date.now(), symbol: selectedSymbol, type: side === 'buy' ? 'limit_buy' : 'limit_sell', price: lp, qty, time: new Date().toLocaleTimeString(), sl, tp }); saveUserData(); showToast('Order Placed', 'info'); bootstrap.Modal.getInstance(document.getElementById('tradeModal')).hide(); renderOrders(); return; }
-            if (side === 'buy') { 
-                if (user.cash >= total) { 
-                    user.cash -= total; if (!user.portfolio[s.symbol]) user.portfolio[s.symbol] = { qty: 0, avg: 0 }; let old = user.portfolio[s.symbol].qty * user.portfolio[s.symbol].avg; user.portfolio[s.symbol].qty += qty; user.portfolio[s.symbol].avg = (old + total) / user.portfolio[s.symbol].qty; logTrade(side, s.symbol, qty, s.price); 
+            if (currentOrderType === 'limit') { const lp = parseFloat(document.getElementById('tradeTargetPrice').value); if (!lp) return; user.orders.push({ id: Date.now(), symbol: selectedSymbol, type: side === 'buy' ? 'limit_buy' : 'limit_sell', price: lp, qty, time: new Date().toLocaleTimeString(), sl, tp }); saveUserData(); bootstrap.Modal.getInstance(document.getElementById('tradeModal')).hide(); renderOrders(); return; }
+            if (side === 'buy') {
+                if (user.cash >= total) {
+                    user.cash -= total; if (!user.portfolio[s.symbol]) user.portfolio[s.symbol] = { qty: 0, avg: 0 }; let old = user.portfolio[s.symbol].qty * user.portfolio[s.symbol].avg; user.portfolio[s.symbol].qty += qty; user.portfolio[s.symbol].avg = (old + total) / user.portfolio[s.symbol].qty; logTrade(side, s.symbol, qty, s.price);
                     if (sl) user.orders.push({ id: Date.now() + 1, symbol: selectedSymbol, type: 'stop_sell', price: sl, qty, time: new Date().toLocaleTimeString() });
                     if (tp) user.orders.push({ id: Date.now() + 2, symbol: selectedSymbol, type: 'limit_sell', price: tp, qty, time: new Date().toLocaleTimeString() });
-                    saveUserData(); showToast('Buy Success', 'success'); 
-                } else showToast('Insufficient Funds', 'error'); 
+                    saveUserData();
+                }
             }
-            else { if (user.portfolio[s.symbol] && user.portfolio[s.symbol].qty >= qty) { user.cash += total; user.portfolio[s.symbol].qty -= qty; if (user.portfolio[s.symbol].qty === 0) delete user.portfolio[s.symbol]; logTrade(side, s.symbol, qty, s.price); saveUserData(); showToast('Sell Success', 'success'); } else showToast('No shares to sell', 'error'); }
+            else { if (user.portfolio[s.symbol] && user.portfolio[s.symbol].qty >= qty) { user.cash += total; user.portfolio[s.symbol].qty -= qty; if (user.portfolio[s.symbol].qty === 0) delete user.portfolio[s.symbol]; logTrade(side, s.symbol, qty, s.price); saveUserData(); } }
             bootstrap.Modal.getInstance(document.getElementById('tradeModal')).hide(); renderAll();
         }
-        function checkOrders() { 
-            let chg = false; 
-            for (let i = user.orders.length - 1; i >= 0; i--) { 
-                const o = user.orders[i]; const s = stocks.find(x => x.symbol === o.symbol); let exe = false; 
-                if (o.type === 'limit_buy' && s.price <= o.price) { 
-                    if (user.cash >= o.price * o.qty) { 
-                        user.cash -= o.price * o.qty; if (!user.portfolio[o.symbol]) user.portfolio[o.symbol] = { qty: 0, avg: 0 }; user.portfolio[o.symbol].qty += o.qty; exe = true; logTrade('buy (limit)', o.symbol, o.qty, o.price); 
+        function checkOrders() {
+            let chg = false;
+            for (let i = user.orders.length - 1; i >= 0; i--) {
+                const o = user.orders[i]; const s = stocks.find(x => x.symbol === o.symbol); let exe = false;
+                if (o.type === 'limit_buy' && s.price <= o.price) {
+                    if (user.cash >= o.price * o.qty) {
+                        user.cash -= o.price * o.qty; if (!user.portfolio[o.symbol]) user.portfolio[o.symbol] = { qty: 0, avg: 0 }; user.portfolio[o.symbol].qty += o.qty; exe = true; logTrade('buy (limit)', o.symbol, o.qty, o.price);
                         if (o.sl) user.orders.push({ id: Date.now() + Math.random(), symbol: o.symbol, type: 'stop_sell', price: o.sl, qty: o.qty, time: new Date().toLocaleTimeString() });
                         if (o.tp) user.orders.push({ id: Date.now() + Math.random(), symbol: o.symbol, type: 'limit_sell', price: o.tp, qty: o.qty, time: new Date().toLocaleTimeString() });
-                    } 
-                } else if (o.type === 'limit_sell' && s.price >= o.price) { 
-                    if (user.portfolio[o.symbol] && user.portfolio[o.symbol].qty >= o.qty) { user.cash += o.price * o.qty; user.portfolio[o.symbol].qty -= o.qty; if (user.portfolio[o.symbol].qty === 0) delete user.portfolio[o.symbol]; exe = true; logTrade('sell (limit)', o.symbol, o.qty, o.price); } 
+                    }
+                } else if (o.type === 'limit_sell' && s.price >= o.price) {
+                    if (user.portfolio[o.symbol] && user.portfolio[o.symbol].qty >= o.qty) { user.cash += o.price * o.qty; user.portfolio[o.symbol].qty -= o.qty; if (user.portfolio[o.symbol].qty === 0) delete user.portfolio[o.symbol]; exe = true; logTrade('sell (limit)', o.symbol, o.qty, o.price); }
                 } else if (o.type === 'stop_sell' && s.price <= o.price) {
                     if (user.portfolio[o.symbol] && user.portfolio[o.symbol].qty >= o.qty) { user.cash += s.price * o.qty; user.portfolio[o.symbol].qty -= o.qty; if (user.portfolio[o.symbol].qty === 0) delete user.portfolio[o.symbol]; exe = true; logTrade('sell (stop)', o.symbol, o.qty, s.price); }
                 }
-                if (exe) { user.orders.splice(i, 1); chg = true; showToast(`Order Executed: ${o.symbol}`, 'success'); } 
-            } 
-            if (chg) saveUserData(); 
+                if (exe) { user.orders.splice(i, 1); chg = true; }
+            }
+            if (chg) saveUserData();
         }
         function logTrade(t, s, q, p) { user.history.unshift({ time: new Date().toLocaleString(), type: t, sym: s, qty: q, price: p }); }
-        function renderPortfolio() { 
-            const b = document.getElementById('portfolioTableBody'); 
-            const entries = Object.entries(user.portfolio); 
+        function renderPortfolio() {
+            const b = document.getElementById('portfolioTableBody');
+            const entries = Object.entries(user.portfolio);
             renderPortfolioChart();
-            if (entries.length === 0) { b.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No holdings.</td></tr>'; return; } 
-            b.innerHTML = entries.map(([sym, d]) => { const s = stocks.find(i => i.symbol === sym); const val = s.price * d.qty; const pl = val - (d.avg * d.qty); const col = pl >= 0 ? 'text-success-custom' : 'text-danger-custom'; return `<tr onclick="selectStock('${sym}'); showSection('dashboard')" class="list-row cursor-pointer"><td class="ps-4 fw-bold">${sym}</td><td>${d.qty}</td><td>${fmtMoney(d.avg)}</td><td>${fmtMoney(s.price)}</td><td class="${col}">${fmtMoney(pl)}</td><td class="${col}">${((pl / (d.avg * d.qty)) * 100).toFixed(2)}%</td><td class="pe-4 text-end"><button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); openTradeModal('sell')">Sell</button></td></tr>`; }).join(''); 
+            if (entries.length === 0) { b.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-muted">No holdings.</td></tr>'; return; }
+            b.innerHTML = entries.map(([sym, d]) => { const s = stocks.find(i => i.symbol === sym); const val = s.price * d.qty; const pl = val - (d.avg * d.qty); const col = pl >= 0 ? 'text-success-custom' : 'text-danger-custom'; return `<tr onclick="selectStock('${sym}'); showSection('dashboard')" class="list-row cursor-pointer"><td class="ps-4 fw-bold">${sym}</td><td>${d.qty}</td><td>${fmtMoney(d.avg)}</td><td>${fmtMoney(s.price)}</td><td class="${col}">${fmtMoney(pl)}</td><td class="${col}">${((pl / (d.avg * d.qty)) * 100).toFixed(2)}%</td><td class="pe-4 text-end"><button class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); openTradeModal('sell')">Sell</button></td></tr>`; }).join('');
         }
         function renderPortfolioChart() {
             const sectors = {};
@@ -1792,7 +1953,7 @@
                 theme: { mode: isDark ? 'dark' : 'light' }, stroke: { show: false }, dataLabels: { enabled: false },
                 legend: { position: 'bottom' }, plotOptions: { pie: { donut: { size: '70%' } } },
                 colors: ['#2962ff', '#00c853', '#ff9800', '#d50000', '#aa00ff', '#00bfa5'],
-                tooltip: { y: { formatter: function(val) { return fmtMoney(val) } } }
+                tooltip: { y: { formatter: function (val) { return fmtMoney(val) } } }
             };
             if (portfolioChart) { portfolioChart.updateOptions({ labels: labels, theme: { mode: isDark ? 'dark' : 'light' } }); portfolioChart.updateSeries(series); }
             else { el.innerHTML = ""; portfolioChart = new ApexCharts(el, options); portfolioChart.render(); }
@@ -1802,13 +1963,13 @@
         function toggleBot() { const b = document.getElementById('botToggleBtn'), s = document.getElementById('botStatusText'); if (botInterval) { clearInterval(botInterval); botInterval = null; b.innerText = "START BOT"; b.className = "btn btn-lg btn-success w-100 shadow-sm"; s.innerText = "STOPPED"; s.className = "fw-bold text-danger"; } else { botInterval = setInterval(botLogic, 3000); b.innerText = "STOP BOT"; b.className = "btn btn-lg btn-danger w-100 shadow-sm"; s.innerText = "RUNNING"; s.className = "fw-bold text-success"; } }
         let botTrades = 0; function botLogic() { const s = stocks[Math.floor(Math.random() * stocks.length)], action = Math.random() > 0.5 ? 'buy' : 'sell', qty = Math.floor(Math.random() * 5) + 1; const log = document.getElementById('botLog'), entry = document.createElement('div'); entry.className = "mb-1 text-monospace small"; entry.innerHTML = `<span class="text-muted">[${new Date().toLocaleTimeString()}]</span> ${action.toUpperCase()} <span class="fw-bold">${s.symbol}</span>`; log.prepend(entry); if (action === 'buy' && user.cash > s.price * qty) { user.cash -= s.price * qty; if (!user.portfolio[s.symbol]) user.portfolio[s.symbol] = { qty: 0, avg: 0 }; user.portfolio[s.symbol].qty += qty; botTrades++; } else if (action === 'sell' && user.portfolio[s.symbol]?.qty >= qty) { user.cash += s.price * qty; user.portfolio[s.symbol].qty -= qty; if (user.portfolio[s.symbol].qty === 0) delete user.portfolio[s.symbol]; botTrades++; } document.getElementById('botTradesCount').innerText = botTrades; saveUserData(); renderAll(); }
         function renderNews(r = false) { if (!r && document.getElementById('newsContainer').children.length > 0) return; const h = ["earnings beat estimates", "new partnership", "shares dip", "CEO announces plan", "market rally", "downgraded", "workforce cuts", "green energy push"]; document.getElementById('newsContainer').innerHTML = Array(6).fill(0).map(() => { const s = stocks[Math.floor(Math.random() * stocks.length)]; return `<div class="col-md-6 mb-3"><div class="stock-card news-card p-3 h-100"><div class="d-flex justify-content-between mb-2"><span class="badge bg-primary bg-opacity-10 text-primary">${s.sector}</span><small class="text-muted">${Math.floor(Math.random() * 59) + 1}m ago</small></div><h6 class="fw-bold mb-1">${s.symbol} ${h[Math.floor(Math.random() * h.length)]}</h6></div></div>`; }).join(''); }
-        function renderHeatmap() { document.getElementById('heatmapContainer').innerHTML = stocks.map(s => { const hue = s.trend >= 0 ? 145 : 0, op = Math.min(Math.abs(s.trend) * 0.4 + 0.3, 1); return `<div class="heatmap-cell shadow-sm" style="background-color: hsla(${hue}, 70%, 40%, ${op})" onclick="selectStock('${s.symbol}'); showSection('dashboard')"><div class="fw-bold fs-5">${s.symbol}</div><div class="small">${s.trend > 0 ? '+' : ''}${s.trend.toFixed(2)}%</div></div>`; }).join(''); }
+        function renderHeatmap() { document.getElementById('heatmapContainer').innerHTML = stocks.map(s => { const hue = s.trend >= 0 ? 145 : 0, op = Math.min(Math.abs(s.trend) * 0.2 + 0.6, 1); return `<div class="heatmap-cell shadow-sm" style="background-color: hsla(${hue}, 70%, 40%, ${op})" onclick="selectStock('${s.symbol}'); showSection('dashboard')"><div class="fw-bold fs-5">${s.symbol}</div><div class="small">${s.trend > 0 ? '+' : ''}${s.trend.toFixed(2)}%</div></div>`; }).join(''); }
         function renderScreener() { const input = document.getElementById('screenerSearch').value.toLowerCase(), sec = document.getElementById('screenerSector').value, tr = document.getElementById('screenerTrend').value; const f = stocks.filter(s => (s.symbol.toLowerCase().includes(input) || s.name.toLowerCase().includes(input)) && (sec === 'all' || s.sector === sec) && (tr === 'all' || (tr === 'up' ? s.trend > 0 : s.trend < 0))); document.getElementById('screenerGrid').innerHTML = f.map(s => `<div class="col-6 col-md-4 col-xl-3 mb-3"><div class="stock-card h-100" onclick="selectStock('${s.symbol}'); showSection('dashboard')"><div class="d-flex justify-content-between align-items-center mb-2"><h5 class="mb-0 fw-bold text-truncate" style="font-size:0.9rem">${s.symbol}</h5><span class="${s.trend >= 0 ? 'text-success-custom' : 'text-danger-custom'} fw-bold bg-light px-1 rounded small" style="font-size:0.75rem">${s.trend > 0 ? '+' : ''}${s.trend.toFixed(2)}%</span></div><div class="d-flex justify-content-between align-items-end"><div class="fw-bold">${fmtMoney(s.price)}</div></div></div></div>`).join(''); }
         function filterScreener() { renderScreener(); }
-        function addAlert() { const s = document.getElementById('alertSymbol').value, p = parseFloat(document.getElementById('alertPrice').value), c = document.getElementById('alertCondition').value; if (!p) return; user.alerts.push({ id: Date.now(), sym: s, price: p, cond: c }); saveUserData(); renderAlertsList(); showToast('Alert Set', 'success'); }
+        function addAlert() { const s = document.getElementById('alertSymbol').value, p = parseFloat(document.getElementById('alertPrice').value), c = document.getElementById('alertCondition').value; if (!p) return; user.alerts.push({ id: Date.now(), sym: s, price: p, cond: c }); saveUserData(); renderAlertsList(); }
         function renderAlertsList() { const b = document.getElementById('alertBadge'); b.innerText = user.alerts.length; b.style.display = user.alerts.length > 0 ? 'flex' : 'none'; document.getElementById('alertsList').innerHTML = user.alerts.length === 0 ? '<li class="list-group-item bg-transparent text-muted text-center">No alerts</li>' : user.alerts.map(a => `<li class="list-group-item bg-transparent d-flex justify-content-between align-items-center"><span><strong>${a.sym}</strong> ${a.cond} ${a.price}</span><button class="btn btn-sm btn-outline-danger py-0" onclick="removeAlert(${a.id})">&times;</button></li>`).join(''); }
         function removeAlert(id) { user.alerts = user.alerts.filter(a => a.id !== id); saveUserData(); renderAlertsList(); }
-        function checkAlerts() { let chg = false; for (let i = user.alerts.length - 1; i >= 0; i--) { const a = user.alerts[i], s = stocks.find(x => x.symbol === a.sym); if ((a.cond === 'above' && s.price > a.price) || (a.cond === 'below' && s.price < a.price)) { showToast(`🔔 ${s.symbol} passed ${a.price}`, 'info'); user.alerts.splice(i, 1); chg = true; } } if (chg) { saveUserData(); renderAlertsList(); } }
+        function checkAlerts() { let chg = false; for (let i = user.alerts.length - 1; i >= 0; i--) { const a = user.alerts[i], s = stocks.find(x => x.symbol === a.sym); if ((a.cond === 'above' && s.price > a.price) || (a.cond === 'below' && s.price < a.price)) { user.alerts.splice(i, 1); chg = true; } } if (chg) { saveUserData(); renderAlertsList(); } }
 
         function checkWatchlistHighLow() {
             user.watchlist.forEach(sym => {
@@ -1816,11 +1977,11 @@
                 if (!s) return;
 
                 if (s.price >= s.high52) {
-                    if (!s.high52Alert) { showToast(`🚀 ${s.symbol} hit 52-week HIGH: ${fmtMoney(s.price)}`, 'success'); s.high52Alert = true; }
+                    if (!s.high52Alert) { s.high52Alert = true; }
                     s.high52 = s.price; // Update high
                 }
                 if (s.price <= s.low52) {
-                    if (!s.low52Alert) { showToast(`📉 ${s.symbol} hit 52-week LOW: ${fmtMoney(s.price)}`, 'warning'); s.low52Alert = true; }
+                    if (!s.low52Alert) { s.low52Alert = true; }
                     s.low52 = s.price; // Update low
                 }
             });
@@ -1836,14 +1997,13 @@
                 user.avatar = null;
                 user.username = '';
                 saveUserData();
-                showToast("Account reset successfully", "success");
                 renderAll();
                 updateAvatarDisplay();
             }
         }
 
         function downloadHistoryPDF() {
-            if (user.history.length === 0) return showToast('No history to export', 'info');
+            if (user.history.length === 0) return;
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
@@ -1869,7 +2029,7 @@
 
         function fmtMoney(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
         function showSection(id) { document.querySelectorAll('.content-section').forEach(el => el.style.display = 'none'); document.querySelectorAll('.sidebar-btn').forEach(el => el.classList.remove('active')); document.getElementById(id + 'Section').style.display = 'block'; document.getElementById('nav-' + id).classList.add('active'); if (id === 'screener') renderScreener(); if (id === 'heatmap') renderHeatmap(); if (id === 'news') renderNews(); if (id === 'history') document.getElementById('historyList').innerHTML = user.history.map(h => `<div class="card mb-2 shadow-sm border-0"><div class="card-body p-3 d-flex justify-content-between align-items-center"><div><span class="badge ${h.type.includes('buy') ? 'bg-success' : 'bg-danger'} me-2">${h.type.toUpperCase()}</span><span class="fw-bold">${h.sym}</span></div><div class="text-end"><div class="fw-bold">${h.qty} @ ${fmtMoney(h.price)}</div><small class="text-muted">${h.time}</small></div></div></div>`).join(''); if (window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('mobile-open'); document.querySelector('.sidebar-overlay').classList.remove('active'); } }
-        
+
         function loadTheme() {
             const savedTheme = localStorage.getItem('stp_theme') || 'light';
             isDark = savedTheme === 'dark';
@@ -1889,26 +2049,12 @@
 
         function updateUsername() {
             const newName = document.getElementById('settingsUsernameInput').value.trim();
-            if(newName) {
+            if (newName) {
                 user.username = newName;
                 saveUserData();
                 showApp();
-                showToast('Username updated', 'success');
             }
         }
-        function uploadAvatar(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    user.avatar = e.target.result;
-                    saveUserData();
-                    updateAvatarDisplay();
-                    showToast('Profile picture updated', 'success');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        function removeAvatar() { user.avatar = null; saveUserData(); updateAvatarDisplay(); showToast('Profile picture removed', 'info'); }
         function updateAvatarDisplay() {
             const name = user.username || user.email || 'User';
             const def = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2962ff&color=fff&size=150`;
@@ -1919,7 +2065,7 @@
 
         function populateAlertSelect() { document.getElementById('alertSymbol').innerHTML = stocks.map(s => `<option value="${s.symbol}">${s.symbol}</option>`).join(''); }
         function showToast(m, t) { const a = document.getElementById('toastArea'), e = document.createElement('div'); e.className = `toast align-items-center text-white bg-${t === 'error' ? 'danger' : (t === 'success' ? 'success' : 'dark')} border-0 show mb-2 shadow`; e.innerHTML = `<div class="d-flex"><div class="toast-body">${m}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button></div>`; a.appendChild(e); setTimeout(() => e.remove(), 3000); }
-        
+
         /* Drag and Drop Logic */
         function initDashboardDnD() {
             const widgets = document.querySelectorAll('.draggable-widget');
@@ -1948,77 +2094,65 @@
     </script>
 </body>
 
-</html>     doc.setFontSize(11);
-            doc.setTextColor(100);
-            doc.text(`User: ${user.email}`, 14, 30);
-            doc.text(`Date: ${new Date().toLocaleString()}`, 14, 36);
+</html> doc.setFontSize(11);
+doc.setTextColor(100);
+doc.text(`User: ${user.email}`, 14, 30);
+doc.text(`Date: ${new Date().toLocaleString()}`, 14, 36);
 
-            const headers = [['Time', 'Type', 'Symbol', 'Qty', 'Price', 'Total']];
-            const data = user.history.map(h => [
-                h.time, h.type.toUpperCase(), h.sym, h.qty, fmtMoney(h.price), fmtMoney(h.price * h.qty)
-            ]);
+const headers = [['Time', 'Type', 'Symbol', 'Qty', 'Price', 'Total']];
+const data = user.history.map(h => [
+h.time, h.type.toUpperCase(), h.sym, h.qty, fmtMoney(h.price), fmtMoney(h.price * h.qty)
+]);
 
-            doc.autoTable({
-                head: headers, body: data, startY: 44, theme: 'grid',
-                headStyles: { fillColor: [41, 98, 255] },
-                styles: { fontSize: 9 }
-            });
-            doc.save(`trade_history_${new Date().toISOString().slice(0, 10)}.pdf`);
-        }
+doc.autoTable({
+head: headers, body: data, startY: 44, theme: 'grid',
+headStyles: { fillColor: [41, 98, 255] },
+styles: { fontSize: 9 }
+});
+doc.save(`trade_history_${new Date().toISOString().slice(0, 10)}.pdf`);
+}
 
-        function fmtMoney(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-        function showSection(id) { document.querySelectorAll('.content-section').forEach(el => el.style.display = 'none'); document.querySelectorAll('.sidebar-btn').forEach(el => el.classList.remove('active')); document.getElementById(id + 'Section').style.display = 'block'; document.getElementById('nav-' + id).classList.add('active'); if (id === 'screener') renderScreener(); if (id === 'heatmap') renderHeatmap(); if (id === 'news') renderNews(); if (id === 'history') document.getElementById('historyList').innerHTML = user.history.map(h => `<div class="card mb-2 shadow-sm border-0"><div class="card-body p-3 d-flex justify-content-between align-items-center"><div><span class="badge ${h.type.includes('buy') ? 'bg-success' : 'bg-danger'} me-2">${h.type.toUpperCase()}</span><span class="fw-bold">${h.sym}</span></div><div class="text-end"><div class="fw-bold">${h.qty} @ ${fmtMoney(h.price)}</div><small class="text-muted">${h.time}</small></div></div></div>`).join(''); if (window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('mobile-open'); document.querySelector('.sidebar-overlay').classList.remove('active'); } }
-        
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('stp_theme') || 'light';
-            isDark = savedTheme === 'dark';
-            applyTheme();
-        }
-        function toggleTheme() {
-            isDark = !isDark;
-            localStorage.setItem('stp_theme', isDark ? 'dark' : 'light');
-            applyTheme();
-        }
-        function applyTheme() {
-            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            document.getElementById('themeBtn').innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
-            if (chart) chart.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' }, grid: { borderColor: isDark ? '#2b2b40' : '#e0e0e0' } });
-            if (portfolioChart) portfolioChart.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' } });
-        }
-
-        function updateUsername() {
-            const newName = document.getElementById('settingsUsernameInput').value.trim();
-            if(newName) {
-                user.username = newName;
-                saveUserData();
-                showApp();
-                showToast('Username updated', 'success');
-            }
-        }
-        function uploadAvatar(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    user.avatar = e.target.result;
-                    saveUserData();
-                    updateAvatarDisplay();
-                    showToast('Profile picture updated', 'success');
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        function removeAvatar() { user.avatar = null; saveUserData(); updateAvatarDisplay(); showToast('Profile picture removed', 'info'); }
-        function updateAvatarDisplay() {
-            const name = user.username || user.email || 'User';
-            const def = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2962ff&color=fff&size=150`;
-            const src = user.avatar || def;
-            document.getElementById('sidebarAvatar').src = src;
-            document.getElementById('settingsAvatar').src = src;
-        }
-
-        function populateAlertSelect() { document.getElementById('alertSymbol').innerHTML = stocks.map(s => `<option value="${s.symbol}">${s.symbol}</option>`).join(''); }
-        function showToast(m, t) { const a = document.getElementById('toastArea'), e = document.createElement('div'); e.className = `toast align-items-center text-white bg-${t === 'error' ? 'danger' : (t === 'success' ? 'success' : 'dark')} border-0 show mb-2 shadow`; e.innerHTML = `<div class="d-flex"><div class="toast-body">${m}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button></div>`; a.appendChild(e); setTimeout(() => e.remove(), 3000); }
+function fmtMoney(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function showSection(id) { document.querySelectorAll('.content-section').forEach(el => el.style.display = 'none');
+document.querySelectorAll('.sidebar-btn').forEach(el => el.classList.remove('active')); document.getElementById(id +
+'Section').style.display = 'block'; document.getElementById('nav-' + id).classList.add('active'); if (id === 'screener')
+renderScreener(); if (id === 'heatmap') renderHeatmap(); if (id === 'news') renderNews(); if (id === 'history')
+document.getElementById('historyList').innerHTML = user.history.map(h => `<div class="card mb-2 shadow-sm border-0">
+    <div class="card-body p-3 d-flex justify-content-between align-items-center">
+        <div><span
+                class="badge ${h.type.includes('buy') ? 'bg-success' : 'bg-danger'} me-2">${h.type.toUpperCase()}</span><span
+                class="fw-bold">${h.sym}</span></div>
+        <div class="text-end">
+            <div class="fw-bold">${h.qty} @ ${fmtMoney(h.price)}</div><small class="text-muted">${h.time}</small>
+        </div>
+    </div>
+</div>`).join(''); if (window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('mobile-open');
+    document.querySelector('.sidebar-overlay').classList.remove('active'); } } function loadTheme() { const
+    savedTheme=localStorage.getItem('stp_theme') || 'light' ; isDark=savedTheme==='dark' ; applyTheme(); } function
+    toggleTheme() { isDark=!isDark; localStorage.setItem('stp_theme', isDark ? 'dark' : 'light' ); applyTheme(); }
+    function applyTheme() { document.body.setAttribute('data-theme', isDark ? 'dark' : 'light' );
+    document.getElementById('themeBtn').innerHTML=isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>' ;
+    if (chart) chart.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' }, grid: { borderColor: isDark ? '#2b2b40'
+    : '#e0e0e0' } }); if (portfolioChart) portfolioChart.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' } });
+    } function updateUsername() { const newName=document.getElementById('settingsUsernameInput').value.trim();
+    if(newName) { user.username=newName; saveUserData(); showApp(); showToast('Username updated', 'success' ); } }
+    function uploadAvatar(input) { if (input.files && input.files[0]) { const reader=new FileReader();
+    reader.onload=function(e) { user.avatar=e.target.result; saveUserData(); updateAvatarDisplay(); showToast('Profile
+    picture updated', 'success' ); } reader.readAsDataURL(input.files[0]); } } function removeAvatar() {
+    user.avatar=null; saveUserData(); updateAvatarDisplay(); showToast('Profile picture removed', 'info' ); } function
+    updateAvatarDisplay() { const name=user.username || user.email || 'User' ; const
+    def=`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2962ff&color=fff&size=150`; const
+    src=user.avatar || def; document.getElementById('sidebarAvatar').src=src;
+    document.getElementById('settingsAvatar').src=src; } function populateAlertSelect() {
+    document.getElementById('alertSymbol').innerHTML=stocks.map(s=> `<option value="${s.symbol}">${s.symbol}</option>
+    `).join(''); }
+    function showToast(m, t) { const a = document.getElementById('toastArea'), e = document.createElement('div');
+    e.className = `toast align-items-center text-white bg-${t === 'error' ? 'danger' : (t === 'success' ? 'success' :
+    'dark')} border-0 show mb-2 shadow`; e.innerHTML = `<div class="d-flex">
+        <div class="toast-body">${m}</div><button type="button" class="btn-close btn-close-white me-2 m-auto"
+            onclick="this.parentElement.parentElement.remove()"></button>
+    </div>`; a.appendChild(e); setTimeout(() => e.remove(), 3000); }
     </script>
-</body>
+    </body>
 
-</html>
+    </html>
