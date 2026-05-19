@@ -71,7 +71,7 @@ StockTrade Pro demonstrates front-end engineering for **fintech**, **trading das
 - Algorithmic Trading Bot
 - ApexCharts
 - Bootstrap 5
-- Local Storage Authentication
+- Local Storage Session Persistence
 - PDF Export
 - Fintech Project
 
