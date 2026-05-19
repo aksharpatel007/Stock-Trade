@@ -1,32 +1,82 @@
-The repository README was too thin for hiring, portfolio, and recruiter-facing use. This update replaces it with a structured project overview that better communicates the product scope, technical surface area, and measurable implementation details.
+# Swastik AI
 
-- **Summary**
-  - Reworked the README to present StockTrade Pro as a polished trading simulator rather than a bare repository stub.
-  - Added implementation-backed numerical data so the document is more credible, scannable, and ATS-friendly.
+Swastik AI is a Flask-based AI chat web application with user authentication, chat session storage, and support for multiple AI providers.
 
-- **Documentation overhaul**
-  - Added a concise product summary focused on fintech, trading dashboard, portfolio analytics, and front-end engineering value.
-  - Reorganized the content into clear sections for features, technology stack, project structure, run instructions, and standout capabilities.
+## Key Features
 
-- **Quantified project snapshot**
-  - Introduced a metrics table sourced from the current app implementation, including seeded stocks, sectors, starting balance, generated chart history, simulation cadence, reward tiers, and admin tracking limits.
-  - Kept the numbers aligned with the codebase to avoid vague marketing language.
+- User registration and login with password hashing
+- Persistent chat sessions and message history using PostgreSQL
+- Multi-model AI routing across Gemini, Groq, SambaNova, and GitHub-hosted models
+- Simple command handling for opening common websites from chat input
+- Single-page web interface served by Flask
 
-- **ATS / discoverability improvements**
-  - Added an ATS-oriented topics section using relevant domain and engineering terms in a cleaner format.
-  - Shifted the README toward recruiter-friendly and resume-adjacent language without turning it into keyword stuffing.
+## Technology Stack
 
-- **Content cleanup**
-  - Replaced repository-specific absolute paths with portable usage guidance.
-  - Removed version-style documentation details that were likely to drift without explicit version tracking.
+- Python
+- Flask
+- Flask-CORS
+- Flask-SQLAlchemy
+- Flask-Bcrypt
+- PostgreSQL
+- OpenAI SDK (for compatible providers)
+- Google Generative AI SDK
+- Gunicorn
 
-```md
-## Project Snapshot
-| Metric | Value |
-| --- | --- |
-| Seeded stocks | 16 |
-| Market sectors represented | 6 |
-| Starting virtual balance per user | $50,000 |
-| Historical data points generated per stock | 50 |
-| Market simulation refresh interval | 1 second |
+## Project Structure
+
+- `app.py` - Main Flask application, API routes, model routing, and database models
+- `swastik_f.html` - Frontend UI template
+- `requirements.txt` - Python dependencies
+
+## API Endpoints
+
+- `GET /` - Loads the web interface
+- `POST /register` - Creates a new user account
+- `POST /login` - Authenticates an existing user
+- `POST /agent` - Processes user input and returns model or system-command responses
+
+## Environment Variables
+
+Set these in a `.env` file or environment:
+
+- `DB_PASSWORD` - PostgreSQL password
+- `DB_PORT` - PostgreSQL port
+- `GEMINI_API_KEY` - Google Gemini API key
+- `GROQ_API_KEY` - Groq API key
+- `SAMBANOVA_KEY` - SambaNova API key
+- `GITHUB_TOKEN` - GitHub models inference token
+- `MISTRAL_KEY` - Mistral API key
+- `HF_TOKEN` - Hugging Face token
+
+## Setup and Run
+
+1. Clone the repository.
+2. Create and activate a Python virtual environment.
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
 ```
+
+4. Ensure PostgreSQL is running.
+5. Create the required database. The app currently expects the database name `swastik_data` because it is hardcoded in `app.py`.
+
+```bash
+createdb swastik_data
+```
+
+6. Configure environment variables.
+7. Start the app:
+
+```bash
+python app.py
+```
+
+The application runs on `http://localhost:5001` by default.
+
+## Notes
+
+- Database tables are created automatically at startup using `db.create_all()` once the PostgreSQL database exists.
+- In development mode, Flask debug is enabled in `app.py`.
+- Never enable debug mode in production because it can expose sensitive data and remote code execution paths through the debugger.
+- For production, use Gunicorn with debug disabled.
