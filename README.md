@@ -10,7 +10,7 @@ StockTrade Pro demonstrates front-end engineering for **fintech**, **trading das
 ## Project Snapshot
 | Metric | Value |
 | --- | --- |
-| Application version | 3.4.0 |
+| UI version label | v3.4.0 |
 | Seeded stocks | 16 |
 | Market sectors represented | 6 |
 | Starting virtual balance per user | $50,000 |
@@ -57,8 +57,24 @@ StockTrade Pro demonstrates front-end engineering for **fintech**, **trading das
 10. Alerts Center
 11. Admin Panel
 
-## Business and ATS Keywords
-**Stock Trading Simulator, Paper Trading Platform, Trading Dashboard, Portfolio Management, Financial Analytics, Real-Time Data Visualization, Responsive Web Application, JavaScript Frontend Development, Admin Dashboard, Watchlist Management, Market Screener, Algorithmic Trading Bot, ApexCharts, Bootstrap 5, Local Storage Authentication, PDF Export, Fintech Project**
+## ATS and Search Topics
+- Stock Trading Simulator
+- Paper Trading Platform
+- Trading Dashboard
+- Portfolio Management
+- Financial Analytics
+- Real-Time Data Visualization
+- Responsive Web Application
+- JavaScript Frontend Development
+- Admin Dashboard
+- Watchlist Management
+- Market Screener
+- Algorithmic Trading Bot
+- ApexCharts
+- Bootstrap 5
+- Local Storage Authentication
+- PDF Export
+- Fintech Project
 
 ## How to Run
 1. Clone or download the repository.
