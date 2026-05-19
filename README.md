@@ -10,7 +10,6 @@ StockTrade Pro demonstrates front-end engineering for **fintech**, **trading das
 ## Project Snapshot
 | Metric | Value |
 | --- | --- |
-| UI version label | v3.4.0 |
 | Seeded stocks | 16 |
 | Market sectors represented | 6 |
 | Starting virtual balance per user | $50,000 |
@@ -22,7 +21,7 @@ StockTrade Pro demonstrates front-end engineering for **fintech**, **trading das
 | Daily leaderboard rewards | $5,000 / $3,000 / $1,000 |
 | Admin top performers tracked | Top 5 |
 | Admin trade log preview | Latest 50 trades |
-| Auto-bot execution interval | 3 seconds |
+| Demo auto-bot cycle | 3 seconds |
 
 ## Core Features
 - Real-time stock market simulation with dynamically updated prices and trend movement
